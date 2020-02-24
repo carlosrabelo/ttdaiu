@@ -1,5 +1,4 @@
 ansible
-libmysql-cil-dev
 mysql-client
 postgresql-client
 python3-dev
