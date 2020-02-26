@@ -1,4 +1,5 @@
 ansible
+php-cli
 mysql-client
 postgresql-client
 python3-dev

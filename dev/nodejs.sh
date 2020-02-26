@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt-get install curl python-software-properties
+apt-get install curl software-properties-common
 
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
 
