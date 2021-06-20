@@ -1,6 +1,6 @@
 #!/bin/bash
 
-base=https://github.com/docker/machine/releases/download/v0.16.1
+base=https://github.com/docker/machine/releases/download/v0.16.2
 
 curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine
 

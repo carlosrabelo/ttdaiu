@@ -1,6 +1,6 @@
 #!/bin/bash
 
-base=https://github.com/docker/compose/releases/download/1.24.0
+base=https://github.com/docker/compose/releases/download/1.29.2
 
 curl -L $base/docker-compose-$(uname -s)-$(uname -m) >/tmp/docker-compose
 
