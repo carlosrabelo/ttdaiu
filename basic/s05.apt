@@ -1,5 +1,6 @@
 chromium-browser
 curl
+ffmpeg
 filezilla
 firefox
 gimp
@@ -13,4 +14,5 @@ mypaint
 net-tools
 openshot
 remmina
+virtualbox
 vlc
