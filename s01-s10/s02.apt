@@ -4,6 +4,7 @@ ffmpeg
 filezilla
 firefox
 gimp
+gnome-tweaks
 gufw
 inkscape
 libreoffice
@@ -12,6 +13,10 @@ love
 mc
 mypaint
 net-tools
+network-manager-l2tp
+network-manager-l2tp-gnome
+network-manager-openconnect
+network-manager-openconnect-gnome
 openshot
 remmina
 virtualbox
