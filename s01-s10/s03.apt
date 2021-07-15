@@ -3,4 +3,5 @@ default-jdk
 default-jre
 git
 gradle
+meld
 openssh-server
