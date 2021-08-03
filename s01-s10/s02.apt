@@ -1,3 +1,4 @@
+ansible
 chromium-browser
 curl
 ffmpeg
@@ -17,7 +18,9 @@ network-manager-l2tp
 network-manager-l2tp-gnome
 network-manager-openconnect
 network-manager-openconnect-gnome
+obs-studio
 openshot
 remmina
+sshpass
 virt-manager
 vlc
