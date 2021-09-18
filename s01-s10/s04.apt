@@ -1,4 +1,6 @@
+black
 mysql-client
+pep8
 php-cli
 postgresql-client
 python3-dev
