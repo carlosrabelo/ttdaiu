@@ -4,8 +4,7 @@ curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stab
 
 curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 
-apt-get update
+apt-get --yes update
 
-apt-get install --yes --autoremove apt-transport-https
-apt-get install --yes --autoremove dart
-
+apt-get --yes --autoremove install apt-transport-https
+apt-get --yes --autoremove install dart
