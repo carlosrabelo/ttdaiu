@@ -7,4 +7,5 @@ echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" 
 apt-get --yes update
 
 apt-get --yes --autoremove install apt-transport-https
-apt-get --yes --autoremove install code
+
+apt-get --yes --autoremove install  code
