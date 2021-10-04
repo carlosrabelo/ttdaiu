@@ -6,4 +6,4 @@ apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_re
 
 apt-get --yes update
 
-apt-get --yes --autoremove install vagrant
+apt-get --yes --autoremove install vagrant terraform packer
