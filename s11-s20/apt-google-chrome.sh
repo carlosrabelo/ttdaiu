@@ -6,4 +6,4 @@ curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 
 apt-get update
 
-apt-get install --yes --autoremove $(grep -vE "^\s*#" google-chrome.apt | tr "\n" " ")
+apt-get install --yes --autoremove $(grep -vE "^\s*#" apt-google-chrome.apt | tr "\n" " ")
