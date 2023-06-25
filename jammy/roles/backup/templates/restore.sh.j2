@@ -1,0 +1,81 @@
+#!/bin/bash
+# TTDAIU Configuration Restore Script
+# Generated on {{ ansible_date_time.iso8601 }}
+
+set -e
+
+BACKUP_DIR="{{ backup_directory }}"
+CONFIG_DIR="${BACKUP_DIR}/configs"
+USER_HOME="{{ main_home }}"
+
+echo "TTDAIU Configuration Restore Script"
+echo "==================================="
+echo "Backup directory: ${BACKUP_DIR}"
+echo "Target user home: ${USER_HOME}"
+echo ""
+
+# Check if backup directory exists
+if [[ ! -d "${CONFIG_DIR}" ]]; then
+    echo "Error: Backup configuration directory not found: ${CONFIG_DIR}"
+    exit 1
+fi
+
+# Function to restore a file
+restore_file() {
+    local backup_file="$1"
+    local original_name="$2"
+    local target_file="${USER_HOME}/${original_name}"
+
+    if [[ -f "${backup_file}" ]]; then
+        echo -n "Restore ${original_name}? (y/N): "
+        read -r response
+        if [[ "${response}" =~ ^[Yy]$ ]]; then
+            if [[ -f "${target_file}" ]]; then
+                cp "${target_file}" "${target_file}.pre-restore-$(date +%Y%m%d_%H%M%S)"
+                echo "  Created backup of current file: ${target_file}.pre-restore-*"
+            fi
+            cp "${backup_file}" "${target_file}"
+            echo "  Restored: ${target_file}"
+        else
+            echo "  Skipped: ${original_name}"
+        fi
+    else
+        echo "  No backup found for: ${original_name}"
+    fi
+}
+
+echo "Available configuration backups:"
+ls -la "${CONFIG_DIR}" || {
+    echo "No backup files found!"
+    exit 1
+}
+echo ""
+
+echo "This will restore your backed up configuration files."
+echo "Current files will be backed up with .pre-restore-* suffix."
+echo ""
+echo -n "Continue with restore? (y/N): "
+read -r continue_restore
+
+if [[ ! "${continue_restore}" =~ ^[Yy]$ ]]; then
+    echo "Restore cancelled."
+    exit 0
+fi
+
+echo ""
+echo "Starting restore process..."
+
+# Restore individual files
+{% for item in backup_files %}
+restore_file "${CONFIG_DIR}/{{ item | basename }}.bak" "{{ item | basename }}"
+{% endfor %}
+
+echo ""
+echo "Restore process completed!"
+echo ""
+echo "Next steps:"
+echo "1. Review the restored files"
+echo "2. Log out and log back in to apply shell changes"
+echo "3. Test your applications"
+echo ""
+echo "If you encounter issues, check the .pre-restore-* backup files"

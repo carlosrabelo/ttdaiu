@@ -1,0 +1,76 @@
+---
+# Backup and restore configuration files
+# This role helps preserve important user configurations
+
+- name: Check if backup is enabled
+  ansible.builtin.debug:
+    msg: "Backup operations are {{ 'enabled' if backup_enabled else 'disabled' }}"
+
+- name: Create backup directory
+  ansible.builtin.file:
+    path: "{{ backup_directory }}"
+    state: directory
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: '0755'
+  when: backup_enabled | default(false)
+
+- name: Create backup subdirectories
+  ansible.builtin.file:
+    path: "{{ backup_directory }}/{{ item }}"
+    state: directory
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: '0755'
+  loop:
+    - configs
+    - dotfiles
+    - scripts
+  when: backup_enabled | default(false)
+
+- name: Backup existing configuration files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ backup_directory }}/configs/{{ item | basename }}.bak"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: '0644'
+    remote_src: true
+  loop: "{{ backup_files }}"
+  when:
+    - backup_enabled | default(false)
+    - item is file
+  failed_when: false
+  register: backup_results
+
+- name: Create backup manifest
+  ansible.builtin.template:
+    src: backup_manifest.yml.j2
+    dest: "{{ backup_directory }}/backup_manifest.yml"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: '0644'
+  when: backup_enabled | default(false)
+
+- name: Create restore script
+  ansible.builtin.template:
+    src: restore.sh.j2
+    dest: "{{ backup_directory }}/restore.sh"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: '0755'
+  when: backup_enabled | default(false)
+
+- name: Display backup summary
+  ansible.builtin.debug:
+    msg: |
+      Backup summary:
+      - Backup enabled: {{ backup_enabled | default(false) }}
+      - Backup directory: {{ backup_directory if backup_enabled else 'N/A' }}
+      - Files backed up: {{ backup_results.results | selectattr('changed') | list | length if backup_enabled else 0 }}
+      - Total files attempted: {{ backup_files | length if backup_enabled else 0 }}
+
+      {% if backup_enabled %}
+      To restore configurations, run:
+      {{ backup_directory }}/restore.sh
+      {% endif %}

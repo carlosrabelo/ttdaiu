@@ -1,0 +1,45 @@
+---
+# Main playbook for Ubuntu 22.04 Jammy Jellyfish
+- name: Bootstrap Ubuntu Jammy with ttdaiu
+  hosts: all
+  become: yes
+  vars:
+    main_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+    main_home: "{{ '/home/' + (ansible_env.SUDO_USER | default(ansible_user_id)) }}"
+
+  pre_tasks:
+    - name: Define Vagrant/VM environment flag
+      ansible.builtin.set_fact:
+        is_vagrant: >-
+          {{ (ansible_virtualization_type in ['kvm','virtualbox'])
+            or (ansible_product_name|lower is search('virtualbox'))
+            or (ansible_system_vendor|lower is search('qemu|kvm')) }}
+
+    - name: Verify Ubuntu version compatibility
+      ansible.builtin.assert:
+        that:
+          - ansible_distribution == "Ubuntu"
+          - ansible_distribution_version == "22.04"
+        fail_msg: "This playbook is designed for Ubuntu 22.04 (Jammy Jellyfish)"
+
+    - name: Apt | update cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+  roles:
+    - { role: backup,      tags: [backup] }
+    - { role: packages,    tags: [apt, packages] }
+
+    - { role: bash,        tags: [apt, bash] }
+    - { role: libvirt,     tags: [apt, libvirt] }
+    - { role: nginx,       tags: [apt, nginx] }
+    - { role: z80,         tags: [apt, z80] }
+
+    - { role: chromium,    tags: [snap, chromium] }
+    - { role: code,        tags: [snap, code] }
+    - { role: codium,      tags: [snap, codium] }
+    - { role: docker,      tags: [snap, docker] }
+    - { role: golang,      tags: [snap, golang] }
+    - { role: libreoffice, tags: [snap, libreoffice] }
+    - { role: node,        tags: [snap, node] }

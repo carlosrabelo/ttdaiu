@@ -1,0 +1,77 @@
+
+# Vagrantfile – Ubuntu 24.04 (Noble) – VirtualBox & Libvirt
+
+Vagrant.configure("2") do |config|
+
+  # Select provider via enviroment variable
+
+  provider = ENV.fetch("VAGRANT_DEFAULT_PROVIDER", "libvirt")
+
+  # Choose proper base box depending on provider
+
+  config.vm.box = provider == "libvirt" ? "cloud-image/ubuntu-24.04" : "generic/ubuntu2404"
+
+  # Disable default synced folder for cleaner builds
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # Private network with DHCP
+
+  config.vm.network "private_network", type: "dhcp"
+
+  # Default resources
+
+  config.vm.provider :libvirt do |lv|
+
+    lv.cpus = 2
+    lv.memory = 4096
+    lv.qemu_use_session = false
+
+  end
+
+  config.vm.provider :virtualbox do |vb|
+
+    vb.cpus = 2
+    vb.memory = 4096
+    vb.gui = false
+
+  end
+
+  # Ansible provisioning (executed on host)
+
+  config.vm.provision "ansible" do |ans|
+
+    ans.playbook = "site.yml"
+    ans.become = true
+    ans.compatibility_mode = "2.0"
+    ans.verbose = ENV.fetch("ANSIBLE_VERBOSE", "v")
+
+    # Use tags from environment variable for selective testing
+    ans.tags = ENV["ANSIBLE_TAGS"] if ENV["ANSIBLE_TAGS"]
+
+    ans.extra_vars = {
+      "ansible_python_interpreter" => "/usr/bin/python3",
+      "is_vagrant" => true,
+      "vagrant_development" => true
+    }
+
+    # Add debugging and development flags
+    ans.raw_arguments = [
+      "--extra-vars", "ANSIBLE_DISPLAY_ARGS_TO_STDOUT=1"
+    ]
+
+    # Add SSH forwarding for development
+    ans.raw_ssh_args = ['-o ForwardAgent=yes']
+
+  end
+
+  # Optional shell provisioner for quick setup
+  config.vm.provision "shell", run: "never", name: "quick-setup" do |shell|
+    shell.inline = <<-SHELL
+      apt-get update
+      apt-get install -y curl git htop tree
+      echo "Quick setup completed for development"
+    SHELL
+  end
+
+end

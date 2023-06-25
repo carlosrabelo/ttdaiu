@@ -1,0 +1,36 @@
+# Production environment specific variables for Jammy
+
+# Conservative settings for production
+ansible_verbosity: 1
+
+# Production-specific security packages
+security_packages:
+  - ufw
+  - fail2ban
+  - rkhunter
+
+# Longer cache validity for production stability
+apt_cache_valid_time: 7200
+
+# Conservative feature set for production
+features:
+  install_development_tools: false  # Usually not needed in production
+  install_media_tools: true
+  install_productivity_tools: true
+  install_latex_tools: false       # Usually not needed
+  configure_bash: true
+  setup_networking: true
+  enable_backups: true             # Always enabled in production
+
+# Production backup settings
+backup_keep_days: 90
+backup_max_copies: 30
+
+# Jammy production specific settings
+jammy_production:
+  # Stable package preferences
+  prefer_stable_packages: true
+  # Disable experimental features
+  experimental_features: false
+  # LTS-specific optimizations
+  lts_optimizations: true

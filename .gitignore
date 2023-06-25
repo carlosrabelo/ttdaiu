@@ -1,0 +1,41 @@
+# Vagrant
+.vagrant
+
+# Environment and sensitive data
+.env
+.env.local
+.env.production
+.env.staging
+*.env
+!.env.example
+
+# Proxmox credentials and config
+proxmox.conf
+proxmox-credentials.ini
+proxmox-*.conf
+
+# SSH keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.pub
+!*.pub.example
+
+# API tokens and secrets
+*secret*
+*token*
+*password*
+credentials.json
+auth.json
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/

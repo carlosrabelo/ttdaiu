@@ -1,0 +1,33 @@
+# TTDAIU Backup Manifest
+# Generated on {{ ansible_date_time.iso8601 }}
+# Host: {{ ansible_hostname }}
+# User: {{ main_user }}
+
+backup_info:
+  created_by: "TTDAIU Ansible Playbook"
+  created_on: "{{ ansible_date_time.iso8601 }}"
+  hostname: "{{ ansible_hostname }}"
+  user: "{{ main_user }}"
+  ubuntu_version: "{{ ansible_distribution_version }}"
+  backup_directory: "{{ backup_directory }}"
+
+files_backed_up:
+{% for item in backup_files %}
+  - original: "{{ item }}"
+    backup: "{{ backup_directory }}/configs/{{ item | basename }}.bak"
+    exists: {{ item is file }}
+{% endfor %}
+
+restore_instructions: |
+  To restore your configuration files:
+  1. Review the files in {{ backup_directory }}/configs/
+  2. Run the restore script: {{ backup_directory }}/restore.sh
+  3. Or manually copy files as needed
+
+  Example manual restore:
+  cp {{ backup_directory }}/configs/.bashrc.bak {{ main_home }}/.bashrc
+
+notes: |
+  - This backup was created before running TTDAIU setup
+  - Original files are preserved with .bak extension
+  - The restore script will ask for confirmation before overwriting files

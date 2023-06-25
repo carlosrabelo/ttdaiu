@@ -1,0 +1,53 @@
+---
+- name: Check if snapd is available
+  ansible.builtin.command: which snap
+  register: snap_available
+  failed_when: false
+  changed_when: false
+
+- name: Ensure snapd service is running
+  ansible.builtin.systemd:
+    name: snapd
+    state: started
+    enabled: true
+  when: snap_available.rc == 0
+
+- name: Install Docker via snap
+  ansible.builtin.snap:
+    classic: true
+    state: present
+    name: docker
+  register: docker_install_result
+  retries: 3
+  delay: 10
+  until: docker_install_result is succeeded
+  when: snap_available.rc == 0
+
+- name: Add user to docker group
+  ansible.builtin.user:
+    name: "{{ main_user }}"
+    groups: docker
+    append: true
+  register: docker_group_result
+  when: docker_install_result is succeeded
+
+- name: Verify Docker installation
+  ansible.builtin.command: docker --version
+  register: docker_version
+  failed_when: false
+  changed_when: false
+  become_user: "{{ main_user }}"
+  when: docker_install_result is succeeded
+
+- name: Display Docker installation status
+  ansible.builtin.debug:
+    msg: |
+      Docker installation status:
+      - Snap available: {{ 'Yes' if snap_available.rc == 0 else 'No' }}
+      - Installation: {{ 'OK' if docker_install_result is succeeded else 'FAILED' }}
+      - User added to group: {{ 'OK' if docker_group_result is succeeded else 'FAILED' }}
+      - Version: {{ docker_version.stdout if docker_version.rc == 0 else 'Not available' }}
+
+      {% if docker_group_result is succeeded %}
+      Note: You may need to log out and log back in for group changes to take effect.
+      {% endif %}

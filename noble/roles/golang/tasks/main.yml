@@ -1,0 +1,64 @@
+---
+- name: Check if snapd is available
+  ansible.builtin.command: which snap
+  register: snap_available
+  failed_when: false
+  changed_when: false
+
+- name: Ensure snapd service is running
+  ansible.builtin.systemd:
+    name: snapd
+    state: started
+    enabled: true
+  when: snap_available.rc == 0
+
+- name: Install Go via snap
+  ansible.builtin.snap:
+    classic: true
+    state: present
+    name: go
+  register: go_install_result
+  retries: 3
+  delay: 10
+  until: go_install_result is succeeded
+  when: snap_available.rc == 0
+
+- name: Create Go workspace directory
+  ansible.builtin.file:
+    path: "{{ main_home }}/go"
+    state: directory
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: '0755'
+  when: go_install_result is succeeded
+
+- name: Create Go workspace subdirectories
+  ansible.builtin.file:
+    path: "{{ main_home }}/go/{{ item }}"
+    state: directory
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: '0755'
+  loop:
+    - src
+    - bin
+    - pkg
+  when: go_install_result is succeeded
+
+- name: Verify Go installation
+  ansible.builtin.command: go version
+  register: go_version
+  failed_when: false
+  changed_when: false
+  become_user: "{{ main_user }}"
+  when: go_install_result is succeeded
+
+- name: Display Go installation status
+  ansible.builtin.debug:
+    msg: |
+      Go installation status:
+      - Snap available: {{ 'Yes' if snap_available.rc == 0 else 'No' }}
+      - Installation: {{ 'OK' if go_install_result is succeeded else 'FAILED' }}
+      - Workspace created: {{ 'Yes' if go_install_result is succeeded else 'No' }}
+      - Version: {{ go_version.stdout if go_version.rc == 0 else 'Not available' }}
+      - GOPATH: {{ main_home }}/go
