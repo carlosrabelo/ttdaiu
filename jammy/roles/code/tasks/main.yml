@@ -1,0 +1,17 @@
+---
+- apt_key:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    keyring: /usr/share/keyrings/microsoft-keyring.gpg
+    state: present
+
+- apt_repository:
+    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-keyring.gpg] https://packages.microsoft.com/repos/vscode stable main
+    filename: microsoft-vscode
+    state: present
+
+- apt:
+    pkg:
+      - apt-transport-https
+      - code
+    state: present
+    update_cache: true

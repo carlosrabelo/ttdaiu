@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  roles:
+    - {role: apt, tags: [apt, wsl] }
+    - {role: aptx, tags: [apt] }
+    - {role: google-chrome, tags: [google-chrome] }
+    - {role: microsoft-edge, tags: [microsoft-edge] }
+    - {role: youtube-dl, tags: [youtube-dl, wsl] }
+    - {role: docker, tags: [docker] }
+    - {role: docker-compose, tags: [docker-compose] }
+    - {role: docker-machine, tags: [docker-machine] }
+    - {role: k3d, tags: [k3d] }
+    - {role: kubectl, tags: [kubectl, wsl] }
+    - {role: hashicorp, tags: [hashicorp, wsl] }
+    - {role: code, tags: [code] }
+    - {role: intellij-idea-ultimate, tags: [intellij-idea-ultimate] }
+    - {role: opera-stable, tags: [opera-stable] }
+    - {role: z80, tags: [z80, wsl] }
+    - {role: godot, tags: [godot] }

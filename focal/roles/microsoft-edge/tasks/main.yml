@@ -1,0 +1,16 @@
+---
+- apt_key:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    keyring: /usr/share/keyrings/microsoft-keyring.gpg
+    state: present
+
+- apt_repository:
+    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-keyring.gpg] https://packages.microsoft.com/repos/edge stable main
+    filename: microsoft-edge-dev
+    state: present
+
+- apt:
+    pkg:
+      - microsoft-edge-beta
+    state: present
+    update_cache: true

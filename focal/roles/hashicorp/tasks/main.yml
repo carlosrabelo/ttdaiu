@@ -1,0 +1,18 @@
+---
+- apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    keyring: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    state: present
+
+- apt_repository:
+    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com focal main
+    filename: hashicorp
+    state: present
+
+- apt:
+    pkg:
+      - packer
+      - terraform
+      - vagrant
+    state: present
+    update_cache: true

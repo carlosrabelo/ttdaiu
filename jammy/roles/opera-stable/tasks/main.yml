@@ -1,0 +1,16 @@
+---
+- apt_key:
+    url: https://deb.opera.com/archive.key
+    keyring: /usr/share/keyrings/opera-stable.gpg
+    state: present
+
+- apt_repository:
+    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/opera-stable.gpg] https://deb.opera.com/opera-stable/ stable non-free
+    filename: opera-stable
+    state: present
+
+- apt:
+    pkg:
+      - opera-stable
+    state: present
+    update_cache: true

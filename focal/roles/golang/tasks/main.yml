@@ -1,0 +1,26 @@
+---
+- get_url:
+    url: https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
+    dest: /tmp/go.tar.gz
+
+- shell:
+    cmd: /usr/bin/tar -C /usr/local -xzf /tmp/go.tar.gz
+
+- copy:
+    src: golang.sh
+    dest: /etc/profile.d/golang.sh
+    mode: a+rw,g+r
+
+- file:
+    path: /tmp/go.tar.gz
+    state: absent
+
+- file:
+    src: /usr/local/go/bin/go
+    dest: /usr/local/bin/go
+    state: link
+
+- file:
+    src: /usr/local/go/bin/gofmt
+    dest: /usr/local/bin/gofmt
+    state: link
