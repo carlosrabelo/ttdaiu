@@ -1,6 +1,7 @@
 ---
 - apt:
     pkg:
+      - audacity
       - bleachbit
       - chromium-browser
       - filezilla
@@ -16,7 +17,6 @@
       - network-manager-l2tp-gnome
       - network-manager-openconnect
       - network-manager-openconnect-gnome
-      - obs-studio
       - openssh-server
       - remmina
       - texlive

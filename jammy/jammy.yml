@@ -15,7 +15,5 @@
     - {role: kubectl, tags: [kubectl, wsl] }
     - {role: hashicorp, tags: [hashicorp, wsl] }
     - {role: code, tags: [code] }
-    - {role: intellij-idea-ultimate, tags: [intellij-idea-ultimate] }
-    - {role: opera-stable, tags: [opera-stable] }
     - {role: z80, tags: [z80, wsl] }
     - {role: godot, tags: [godot] }

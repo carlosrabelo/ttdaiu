@@ -5,8 +5,8 @@
     state: present
 
 - apt_repository:
-    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-keyring.gpg] https://packages.microsoft.com/repos/edge stable main
-    filename: microsoft-edge-dev
+    repo: deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main
+    filename: microsoft-edge-beta
     state: present
 
 - apt:

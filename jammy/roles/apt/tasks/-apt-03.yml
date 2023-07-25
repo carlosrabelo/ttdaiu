@@ -4,6 +4,7 @@
       - autoconf
       - automake
       - black
+      - btop
       - build-essential
       - curl
       - default-jdk
@@ -13,6 +14,7 @@
       - git
       - gradle
       - gufw
+      - htop
       - hugo
       - imagemagick
       - jekyll
