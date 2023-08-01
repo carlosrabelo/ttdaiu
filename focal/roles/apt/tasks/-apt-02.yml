@@ -68,6 +68,7 @@
       - remmina
       - ssh-askpass
       - sshpass
+      - supervisor
       - texlive
       - texlive-lang-portuguese
       - texlive-latex-extra
@@ -75,6 +76,7 @@
       - texstudio
       - texstudio-doc
       - texstudio-l10n
+      - tor
       - virtualbox
       - vlc
       - yadm
