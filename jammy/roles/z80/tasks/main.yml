@@ -2,7 +2,6 @@
 - apt:
     pkg:
       - sdcc
-      - sdcc-ucsim
       - z80asm
       - z80dasm
     state: present
