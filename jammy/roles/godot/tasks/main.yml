@@ -1,6 +1,6 @@
 ---
 - get_url:
-    url: https://github.com/godotengine/godot/releases/download/4.0.3-stable/Godot_v4.0.3-stable_linux.x86_64.zip
+    url: https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_linux.x86_64.zip
     dest: /tmp/godot.zip
     mode: u+x,g-x
 
@@ -10,7 +10,7 @@
     copy: no
 
 - file:
-    src: /usr/local/bin/Godot_v4.0.3-stable_linux.x86_64
+    src: /usr/local/bin/Godot_v4.2.1-stable_linux.x86_64
     dest: /usr/local/bin/Godot
     state: link
 
