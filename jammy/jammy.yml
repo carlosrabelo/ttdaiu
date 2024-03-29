@@ -7,7 +7,6 @@
     - {role: aptx, tags: [apt] }
     - {role: google-chrome, tags: [google-chrome] }
     - {role: microsoft-edge, tags: [microsoft-edge] }
-    - {role: youtube-dl, tags: [youtube-dl, wsl] }
     - {role: docker, tags: [docker] }
     - {role: docker-compose, tags: [docker-compose] }
     - {role: docker-machine, tags: [docker-machine] }
