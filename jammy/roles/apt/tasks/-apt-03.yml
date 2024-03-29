@@ -9,6 +9,7 @@
       - curl
       - default-jdk
       - default-jre
+      - evince
       - ffmpeg
       - g++
       - git
