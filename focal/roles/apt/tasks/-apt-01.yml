@@ -1,5 +1,4 @@
 ---
 - apt:
-    pkg:
-      - ubuntu-restricted-extras
-    state: present
+    upgrade: dist
+    update_cache: yes

@@ -1,6 +1,6 @@
 ---
 - get_url:
-    url: https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
+    url: https://go.dev/dl/go1.22.1.linux-amd64.tar.gz
     dest: /tmp/go.tar.gz
 
 - shell:
@@ -9,7 +9,7 @@
 - copy:
     src: golang.sh
     dest: /etc/profile.d/golang.sh
-    mode: a+rw,g+r
+    mode: u+rw,g+r
 
 - file:
     path: /tmp/go.tar.gz

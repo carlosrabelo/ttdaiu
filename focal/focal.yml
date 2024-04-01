@@ -1,18 +1,18 @@
 ---
 - hosts: localhost
+  connection: local
   become: yes
   roles:
-    - {role: apt, tags: apt}
-    - {role: google-chrome, tags: google-chrome}
-    - {role: microsoft-edge, tags: microsoft-edge}
-    - {role: youtube-dl, tags: youtube-dl}
-    - {role: docker, tags: docker}
-    - {role: docker-compose, tags: docker-compose}
-    - {role: docker-machine, tags: docker-machine}
-    - {role: k3d, tags: k3d}
-    - {role: kubectl, tags: kubectl}
-    - {role: hashicorp, tags: hashicorp}
-    - {role: code, tags: code}
-    - {role: intellij-idea-ultimate, tags: intellij-idea-ultimate}
-    - {role: z80, tags: z80}
-    - {role: godot, tags: godot}
+    - {role: apt, tags: [apt, wsl] }
+    - {role: aptx, tags: [apt] }
+    - {role: k3d, tags: [k3d, wsl] }
+    - {role: kubectl, tags: [kubectl, wsl] }
+    - {role: hashicorp, tags: [hashicorp, wsl] }
+    - {role: google-chrome, tags: [google-chrome] }
+    - {role: microsoft-edge, tags: [microsoft-edge] }
+    - {role: docker, tags: [docker] }
+    - {role: godot, tags: [godot] }
+    - {role: golang, tags: [golang] }
+    - {role: code, tags: [code] }
+    - {role: z80, tags: [z80] }
+    - {role: godot, tags: [godot] }

@@ -1,16 +1,16 @@
 ---
 - get_url:
-    url: https://github.com/godotengine/godot/releases/download/4.0-stable/Godot_v4.0-stable_linux.x86_64.zip
-    dest: /tmp/Godot.zip
+    url: https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_linux.x86_64.zip
+    dest: /tmp/godot.zip
     mode: u+x,g-x
 
 - unarchive:
-    src: /tmp/Godot.zip
+    src: /tmp/godot.zip
     dest: /usr/local/bin/
     copy: no
 
 - file:
-    src: /usr/local/bin/Godot_v4.0-stable_linux.x86_64
+    src: /usr/local/bin/Godot_v4.2.1-stable_linux.x86_64
     dest: /usr/local/bin/Godot
     state: link
 
@@ -20,5 +20,5 @@
     mode: u+r,g+r
 
 - file:
-    path: /tmp/Godot.zip
+    path: /tmp/godot.zip
     state: absent
