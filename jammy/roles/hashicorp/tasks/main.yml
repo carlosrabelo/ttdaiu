@@ -1,11 +1,15 @@
 ---
+- file:
+    path: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    state: absent
+
 - apt_key:
     url: https://apt.releases.hashicorp.com/gpg
-    keyring: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    keyring: /etc/apt/keyrings/hashicorp-archive-keyring.gpg
     state: present
 
 - apt_repository:
-    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com jammy main
+    repo: deb [arch=amd64 signed-by=/etc/apt/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com jammy main
     filename: hashicorp
     state: present
 

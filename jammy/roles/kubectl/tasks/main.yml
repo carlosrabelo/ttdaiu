@@ -1,4 +1,12 @@
 ---
+- file:
+    path: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+    state: absent
+
+- file:
+    path: /usr/share/keyrings/kubernetes-apt-keyring.gpg
+    state: absent
+
 - apt_key:
     url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
     keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
