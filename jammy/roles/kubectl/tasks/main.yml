@@ -1,7 +1,7 @@
 ---
 - apt_key:
     url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
-    keyring: /usr/share/keyrings/kubernetes-apt-keyring.gpg
+    keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
     state: present
 
 - apt_repository:
