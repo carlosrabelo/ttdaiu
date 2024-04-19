@@ -16,3 +16,4 @@
     - {role: code, tags: [code] }
     - {role: z80, tags: [z80] }
     - {role: godot, tags: [godot] }
+    - {role: youtube-dl, tags: [youtube-dl] }

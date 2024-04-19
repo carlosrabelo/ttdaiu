@@ -1,5 +1,5 @@
 ---
 - get_url:
-    url: https://yt-dl.org/downloads/latest/youtube-dl
+    url: https://github.com/ytdl-org/youtube-dl/releases/download/2021.12.17/youtube-dl
     dest: /usr/local/bin/youtube-dl
-    mode: a+x,g+x
+    mode: u+x,g-x
