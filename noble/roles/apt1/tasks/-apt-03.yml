@@ -30,7 +30,6 @@
       - libsdl2-ttf-dev
       - libspeechd2
       - libssl-dev
-      - lmms
       - make
       - mc
       - net-tools
