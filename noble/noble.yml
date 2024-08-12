@@ -7,3 +7,4 @@
     - {role: apt2, tags: [apt, apt2] }
     - {role: godot, tags: [godot] }
     - {role: z80, tags: [z80] }
+    - {role: bash, tags: [bash] }

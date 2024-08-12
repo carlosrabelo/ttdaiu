@@ -1,28 +1,28 @@
 ---
 - copy:
     src: bash_aliases.sh
-    dest: ~/.bash_aliases
+    dest: /home/carlos/.bash_aliases
     owner: carlos
     group: carlos
     mode: u+rw,g+r
 
 - copy:
     src: bash_extras.sh
-    dest: ~/.bash_extras
+    dest: /home/carlos/.bash_extras
     owner: carlos
     group: carlos
     mode: u+rw,g+r
 
 - copy:
     src: bashrc.sh
-    dest: ~/.bashrc
+    dest: /home/carlos/.bashrc
     owner: carlos
     group: carlos
     mode: u+rw,g+r
 
 - copy:
     src: profile.sh
-    dest: ~/.profile
+    dest: /home/carlos/.profile
     owner: carlos
     group: carlos
     mode: u+rw,g+r
