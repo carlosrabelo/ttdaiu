@@ -18,7 +18,6 @@
       - network-manager-l2tp-gnome
       - network-manager-openconnect
       - network-manager-openconnect-gnome
-      - openssh-server
       - remmina
       - texlive
       - texlive-lang-portuguese
