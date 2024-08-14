@@ -6,6 +6,7 @@ After installing or re-installing Ubuntu on your computer, there are a few essen
 
 * 20.04 - Focal
 * 22.04 - Jammy
+* 24.04 - Noble
 
 ## Pre-Execution Requirements
 
