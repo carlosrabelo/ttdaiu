@@ -6,8 +6,10 @@
     - {role: apt1, tags: [apt, apt1, wsl] }
     - {role: apt2, tags: [apt, apt2] }
     - {role: bash, tags: [bash] }
+    - {role: code, tags: [code] }
     - {role: flutter, tags: [flutter] }
     - {role: godot, tags: [godot] }
     - {role: golang, tags: [golang] }
+    - {role: nginx, tags: [nginx] }
     - {role: nodejs, tags: [nodejs] }
     - {role: z80, tags: [z80] }
