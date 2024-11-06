@@ -13,7 +13,7 @@ After installing or re-installing Ubuntu on your computer, there are a few essen
 Before running the ansible script, you need to ensure that you have the following installed:
 
 ```
-sudo apt -y update && apt -y install ansible git sshpass
+sudo apt -y update && sudo apt -y install ansible git sshpass
 ```
 
 ## Executing the Ansible Script

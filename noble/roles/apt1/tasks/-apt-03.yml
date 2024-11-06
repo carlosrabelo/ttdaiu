@@ -33,6 +33,7 @@
       - make
       - mc
       - net-tools
+      - nmap
       - openssh-server
       - php-cli
       - php-gd
