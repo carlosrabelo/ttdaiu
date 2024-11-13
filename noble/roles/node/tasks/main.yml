@@ -3,4 +3,4 @@
     classic: yes
     state: present
     name:
-      - go
+      - node

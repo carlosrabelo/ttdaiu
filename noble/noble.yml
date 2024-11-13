@@ -11,5 +11,5 @@
     - {role: godot, tags: [godot] }
     - {role: golang, tags: [golang] }
     - {role: nginx, tags: [nginx] }
-    - {role: nodejs, tags: [nodejs] }
+    - {role: node, tags: [node] }
     - {role: z80, tags: [z80] }
