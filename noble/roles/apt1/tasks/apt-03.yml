@@ -53,10 +53,12 @@
       - python3-pylint-plugin-utils
       - python3-virtualenv
       - python-is-python3
+      - qrencode
       - ssh-askpass
-      - supervisor
       - sshpass
+      - supervisor
       - tor
+      - wkhtmltopdf
       - yadm
       - zlib1g-dev
     state: present
