@@ -1,6 +1,8 @@
 ---
 - apt:
     pkg:
+      - avahi-autoipd
+      - avahi-utils
       - arp-scan
       - autoconf
       - automake
@@ -55,6 +57,7 @@
       - python3-virtualenv
       - python-is-python3
       - qrencode
+      - screen
       - ssh-askpass
       - ssh-tools
       - sshpass
