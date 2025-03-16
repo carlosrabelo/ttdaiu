@@ -63,6 +63,8 @@
       - sshpass
       - supervisor
       - tor
+      - xfonts-75dpi
+      - xfonts-100dpi
       - wkhtmltopdf
       - yadm
       - zlib1g-dev
