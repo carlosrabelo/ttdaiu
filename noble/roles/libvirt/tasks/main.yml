@@ -1,0 +1,10 @@
+---
+- apt:
+    pkg:
+      - bridge-utils
+      - libvirt-clients
+      - libvirt-daemon-system
+      - libvirt-dev
+      - qemu-kvm
+      - virt-manager
+    state: present
