@@ -3,7 +3,6 @@
     pkg:
       - audacity
       - bleachbit
-      - chromium-browser
       - filezilla
       - gimp
       - gnome-tweaks
