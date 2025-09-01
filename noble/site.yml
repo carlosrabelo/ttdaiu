@@ -24,7 +24,8 @@
     - { role: apt1, tags: [apt, apt1] }
     - { role: apt2, tags: [apt, apt2] }
     - { role: bash, tags: [bash] }
-    - { role: godot, tags: [godot] }
+    - { role: docker, tags: [docker] }
+    - { role: golang, tags: [golang] }
     - { role: libreoffice, tags: [libreoffice] }
     - { role: nginx, tags: [nginx] }
     - { role: z80, tags: [z80] }
