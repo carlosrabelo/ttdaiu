@@ -1,4 +1,4 @@
-# ~/.profile
+# ~/.profile: executed by Bourne-compatible login shells.
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
@@ -8,18 +8,14 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-# set PATH so it includes bin if it exists
+#
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-# set PATH so it includes bin if it exists
+#
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-#
-
-if [ -f ~/.bash_extras ]; then
-    . ~/.bash_extras
-fi
+mesg n 2> /dev/null || true
