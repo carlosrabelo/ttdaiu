@@ -1,6 +1,0 @@
----
-- snap:
-    classic: yes
-    state: present
-    name:
-      - node
