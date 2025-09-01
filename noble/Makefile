@@ -1,5 +1,7 @@
 TAGS ?= apt
 
+all:
+
 up:
 	@vagrant up
 
