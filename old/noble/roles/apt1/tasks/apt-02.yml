@@ -1,7 +1,5 @@
 ---
 - apt:
     pkg:
-      - nginx
-      - php-fpm
+      - ubuntu-restricted-extras
     state: present
-

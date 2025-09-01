@@ -57,7 +57,6 @@
       - python3-virtualenv
       - python-is-python3
       - qrencode
-      - rclone
       - screen
       - ssh-askpass
       - ssh-tools

@@ -5,9 +5,11 @@
       - bleachbit
       - chromium-browser
       - filezilla
+      - firefox
       - gimp
       - gnome-tweaks
       - inkscape
+      - libreoffice
       - lmms
       - love
       - meld
@@ -24,5 +26,6 @@
       - texstudio
       - texstudio-doc
       - texstudio-l10n
+      - virtualbox
       - vlc
     state: present

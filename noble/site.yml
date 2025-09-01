@@ -1,0 +1,28 @@
+---
+# Main playbook for Vagrant environment (ALL hosts)
+- name: Bootstrap Ubuntu Noble with ttdaiu
+  hosts: all
+  become: yes
+  vars:
+    main_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+    main_home: "{{ '/home/' + (ansible_env.SUDO_USER | default(ansible_user_id)) }}"
+
+  pre_tasks:
+    - name: Define Vagrant/VM environment flag
+      ansible.builtin.set_fact:
+        is_vagrant: >-
+          {{ (ansible_virtualization_type in ['kvm','virtualbox'])
+            or (ansible_product_name|lower is search('virtualbox'))
+            or (ansible_system_vendor|lower is search('qemu|kvm')) }}
+
+    - name: Apt | update cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+  roles:
+    - { role: apt1, tags: [apt, apt1] }
+    - { role: apt2, tags: [apt, apt2] }
+    - { role: bash, tags: [bash] }
+    - { role: nginx, tags: [nginx] }
+    - { role: z80, tags: [z80] }

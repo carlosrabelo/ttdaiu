@@ -1,21 +1,58 @@
+
+# Vagrantfile – Ubuntu 24.04 (Noble) – VirtualBox & Libvirt
+
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "cloud-image/ubuntu-24.04"
+  # Select provider via enviroment variable
 
-  config.vm.provider :libvirt do |libvirt|
-    libvirt.memory = 2048
-    libvirt.cpus   = 4
-    libvirt.driver = "kvm"
-    libvirt.uri    = "qemu:///system"
+  provider = ENV.fetch("VAGRANT_DEFAULT_PROVIDER", "libvirt")
+
+  # Choose proper base box depending on provider
+
+  config.vm.box = provider == "libvirt" ? "cloud-image/ubuntu-24.04" : "generic/ubuntu2404"
+
+  # Disable default synced folder for cleaner builds
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # Private network with DHCP
+
+  config.vm.network "private_network", type: "dhcp"
+
+  # Default resources
+
+  config.vm.provider :libvirt do |lv|
+
+    lv.cpus = 2
+    lv.memory = 4096
+    lv.qemu_use_session = false
+
   end
 
-  config.vm.hostname = "ttdaiu"
+  config.vm.provider :virtualbox do |vb|
 
-  config.vm.provision :ansible do |ansible|
-    ansible.compatibility_mode = "2.0"
-    ansible.playbook           = "noble.yml"
-    ansible.become             = true
-    ansible.limit              = "default"
+    vb.cpus = 2
+    vb.memory = 4096
+    vb.gui = false
+
+  end
+
+  # Ansible provisioning (executed on host)
+
+  config.vm.provision "ansible" do |ans|
+
+    ans.playbook = "site.yml"
+    ans.become = true
+    ans.compatibility_mode = "2.0"
+    ans.verbose = "vv"
+    # No ans.tags -> executes ALL roles
+    ans.extra_vars = {
+      "ansible_python_interpreter" => "/usr/bin/python3"
+    }
+    ans.raw_arguments = [
+      "--extra-vars", "ANSIBLE_DISPLAY_ARGS_TO_STDOUT=1"
+    ]
+
   end
 
 end
