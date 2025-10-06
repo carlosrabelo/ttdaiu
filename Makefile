@@ -47,13 +47,13 @@ help:	## Show this help
 	@echo "TTDAIU - Things to do after installing Ubuntu"
 	@echo ""
 	@echo "Main targets:"
-	@grep -E '^(run|dry-run|test|check|syntax|lint|deps|install-deps|info|clean):.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
+	@grep -h -E '^(run|dry-run|test|check|syntax|lint|deps|install-deps|info|clean):.*## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
 	@echo ""
 	@echo "Vagrant targets:"
-	@grep -E '^vagrant-.*:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
+	@grep -h -E '^vagrant-.*:.*## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
 	@echo ""
 	@echo "Proxmox targets:"
-	@grep -E '^proxmox-.*:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
+	@grep -h -E '^proxmox-.*:.*## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
 	@echo ""
 	@echo "Usage examples:"
 	@echo "  make run                         # Run full setup (Noble/24.04)"
