@@ -153,6 +153,7 @@ system_utilities:
   # Terminal tools
   - neovim
   - screen
+  - tree
 
   # Process management
   - supervisor

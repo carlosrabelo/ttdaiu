@@ -121,7 +121,7 @@ case "$UBUNTU_VERSION" in
         log_error "Invalid Ubuntu version: $UBUNTU_VERSION"
         echo "Usage: $0 [noble|jammy|both] [tags] [clean]"
         echo "Examples:"
-        echo "  $0 noble apt false"
+        echo "  $0 noble packages false"
         echo "  $0 both all true"
         echo "  $0 jammy snap false"
         exit 1

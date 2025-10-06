@@ -110,7 +110,7 @@ make proxmox-clean
 
 ```bash
 # Test only APT packages
-make proxmox-provision VM_ID=9000 TAGS=apt
+make proxmox-provision VM_ID=9000 TAGS=packages
 
 # Test only Snap packages
 make proxmox-provision VM_ID=9000 TAGS=snap

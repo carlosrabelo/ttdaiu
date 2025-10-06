@@ -58,7 +58,7 @@ help:	## Show this help
 	@echo "Usage examples:"
 	@echo "  make run                         # Run full setup (Noble/24.04)"
 	@echo "  make run UBUNTU_VERSION=jammy   # Run setup for Jammy/22.04"
-	@echo "  make run TAGS=apt               # Run only apt-related tasks"
+	@echo "  make run TAGS=packages         # Run only package-role tasks"
 	@echo "  make run TAGS=snap              # Run only snap-related tasks"
 	@echo "  make test                       # Run in testing environment"
 	@echo "  make run ENV=testing            # Run with testing inventory"

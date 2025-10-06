@@ -16,7 +16,7 @@ Automated post-installation setup for Ubuntu using Ansible. This project helps y
 - **Ubuntu 24.04 LTS (Noble Numbat)** - Primary support
 - **Ubuntu 22.04 LTS (Jammy Jellyfish)** - Full compatibility
 
-For detailed compatibility information, see [COMPATIBILITY.md](COMPATIBILITY.md)
+For detailed compatibility information, see [COMPATIBILITY.md](docs/COMPATIBILITY.md)
 
 ## Quick Start
 
@@ -53,7 +53,7 @@ make dry-run                       # Preview changes
 Run specific components only:
 
 ```bash
-make run TAGS=apt                           # Install APT packages only
+make run TAGS=packages                     # Install APT packages only
 make run TAGS=snap                          # Install Snap packages only
 make run TAGS=golang UBUNTU_VERSION=jammy  # Install Go on Ubuntu 22.04
 make run TAGS=docker UBUNTU_VERSION=noble  # Install Docker on Ubuntu 24.04
@@ -137,7 +137,7 @@ make proxmox-clean                        # Destroy all test VMs
 #### Advanced Testing Usage
 ```bash
 # Test specific tags
-ANSIBLE_TAGS=apt make vagrant-provision UBUNTU_VERSION=jammy
+ANSIBLE_TAGS=packages make vagrant-provision UBUNTU_VERSION=jammy
 make proxmox-provision VM_ID=9000 TAGS=docker
 
 # Verbose output
@@ -148,8 +148,8 @@ ANSIBLE_VERBOSE=vv make vagrant-up UBUNTU_VERSION=noble
 ```
 
 For detailed testing workflows, see:
-- [VAGRANT-GUIDE.md](VAGRANT-GUIDE.md) - Complete Vagrant usage guide
-- [PROXMOX-GUIDE.md](PROXMOX-GUIDE.md) - Complete Proxmox usage guide
+- [VAGRANT-GUIDE.md](docs/VAGRANT-GUIDE.md) - Complete Vagrant usage guide
+- [PROXMOX-GUIDE.md](docs/PROXMOX-GUIDE.md) - Complete Proxmox usage guide
 
 ### Project Maintenance
 
@@ -168,8 +168,10 @@ make info               # Show project information
 ttdaiu/
 ├── Makefile                    # Main automation commands
 ├── README.md                   # This file
-├── COMPATIBILITY.md            # Ubuntu version compatibility guide
-├── VAGRANT-GUIDE.md           # Comprehensive Vagrant usage guide
+├── docs/
+│   ├── COMPATIBILITY.md       # Ubuntu version compatibility guide
+│   ├── PROXMOX-GUIDE.md       # Proxmox usage guide
+│   └── VAGRANT-GUIDE.md       # Vagrant usage guide
 ├── scripts/
 │   └── vagrant-test.sh        # Automated testing script
 ├── noble/                     # Ubuntu 24.04 (Noble) configuration
@@ -185,6 +187,7 @@ ttdaiu/
 │       ├── packages/         # Consolidated package management
 │       ├── backup/          # Backup and restore functionality
 │       ├── bash/            # Shell configuration
+│       ├── github/          # GitHub CLI repository setup
 │       ├── docker/          # Docker installation with validation
 │       ├── golang/          # Go development environment
 │       └── ...              # Other specialized roles
@@ -209,7 +212,7 @@ ttdaiu/
 
 Use tags to install only what you need:
 
-- `apt` - All APT-based installations
+- `packages` - All APT-based installations
 - `snap` - All Snap-based installations
 - Individual role names (e.g., `golang`, `docker`, `nginx`)
 

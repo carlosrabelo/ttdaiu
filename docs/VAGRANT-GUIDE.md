@@ -70,13 +70,13 @@ make vagrant-clean
 
 ```bash
 # Test only APT packages
-ANSIBLE_TAGS=apt make vagrant-up UBUNTU_VERSION=noble
+ANSIBLE_TAGS=packages make vagrant-up UBUNTU_VERSION=noble
 
 # Test only snap packages
 ANSIBLE_TAGS=snap make vagrant-provision UBUNTU_VERSION=jammy
 
 # Multiple tags
-ANSIBLE_TAGS=apt,bash make vagrant-provision UBUNTU_VERSION=noble
+ANSIBLE_TAGS=packages,bash make vagrant-provision UBUNTU_VERSION=noble
 ```
 
 ### Ansible Verbosity
@@ -274,7 +274,7 @@ config.vm.synced_folder ".", "/vagrant", type: "rsync"
 ./scripts/vagrant-test.sh both all true
 
 # Test only one version
-./scripts/vagrant-test.sh noble apt false
+./scripts/vagrant-test.sh noble packages false
 
 # Automatic cleanup
 make vagrant-clean

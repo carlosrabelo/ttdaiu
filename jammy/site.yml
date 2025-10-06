@@ -29,12 +29,13 @@
 
   roles:
     - { role: backup,      tags: [backup] }
-    - { role: packages,    tags: [apt, packages] }
+    - { role: packages,    tags: [packages] }
 
-    - { role: bash,        tags: [apt, bash] }
-    - { role: libvirt,     tags: [apt, libvirt] }
-    - { role: nginx,       tags: [apt, nginx] }
-    - { role: z80,         tags: [apt, z80] }
+    - { role: bash,        tags: [bash] }
+    - { role: libvirt,     tags: [libvirt] }
+    - { role: nginx,       tags: [nginx] }
+    - { role: z80,         tags: [z80] }
+    - { role: github,      tags: [github] }
 
     - { role: chromium,    tags: [snap, chromium] }
     - { role: code,        tags: [snap, code] }

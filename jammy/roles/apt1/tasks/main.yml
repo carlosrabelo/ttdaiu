@@ -1,4 +1,0 @@
----
-- include_tasks: apt-01.yml
-- include_tasks: apt-02.yml
-- include_tasks: apt-03.yml
