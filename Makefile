@@ -66,26 +66,34 @@ help:	## Show this help
 	@echo "  make vagrant-up                 # Start Vagrant environment"
 
 run:	## Run Ansible playbook
-	@echo "Running TTDAIU setup ($(ENV) environment)..."
-	@cd $(ANSIBLE_DIR) && ansible-playbook $(PLAYBOOK) \
-		-i $(if $(filter testing,$(ENV)),$(TESTING_INVENTORY),$(INVENTORY)) \
-		$(if $(TAGS),--tags "$(TAGS)") \
-		--ask-become-pass
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		ANSIBLE_DIR=$(ANSIBLE_DIR) \
+		PLAYBOOK=$(PLAYBOOK) \
+		INVENTORY=$(INVENTORY) \
+		TESTING_INVENTORY=$(TESTING_INVENTORY) \
+		TAGS=$(TAGS) \
+		ENV=$(ENV) \
+		./scripts/run-ansible.sh run
 
 dry-run:	## Run in check mode (preview changes)
-	@echo "Running TTDAIU setup in check mode ($(ENV) environment)..."
-	@cd $(ANSIBLE_DIR) && ansible-playbook $(PLAYBOOK) \
-		-i $(if $(filter testing,$(ENV)),$(TESTING_INVENTORY),$(INVENTORY)) \
-		$(if $(TAGS),--tags "$(TAGS)") \
-		--check --diff \
-		--ask-become-pass
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		ANSIBLE_DIR=$(ANSIBLE_DIR) \
+		PLAYBOOK=$(PLAYBOOK) \
+		INVENTORY=$(INVENTORY) \
+		TESTING_INVENTORY=$(TESTING_INVENTORY) \
+		TAGS=$(TAGS) \
+		ENV=$(ENV) \
+		./scripts/run-ansible.sh dry-run
 
 test:	## Run in testing environment
-	@echo "Running TTDAIU setup in testing environment..."
-	@cd $(ANSIBLE_DIR) && ansible-playbook $(PLAYBOOK) \
-		-i $(TESTING_INVENTORY) \
-		$(if $(TAGS),--tags "$(TAGS)") \
-		--ask-become-pass
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		ANSIBLE_DIR=$(ANSIBLE_DIR) \
+		PLAYBOOK=$(PLAYBOOK) \
+		INVENTORY=$(INVENTORY) \
+		TESTING_INVENTORY=$(TESTING_INVENTORY) \
+		TAGS=$(TAGS) \
+		ENV=$(ENV) \
+		./scripts/run-ansible.sh test
 
 
 check: syntax	## Check syntax and configuration
@@ -101,147 +109,138 @@ lint:	## Lint with ansible-lint
 deps: install-deps	## Install dependencies
 
 install-deps:	## Install Ansible and dependencies
-	@echo "Installing dependencies..."
-	@sudo apt update
-	@sudo apt install -y ansible git sshpass
+	@./scripts/install-deps.sh
 
 vagrant-up:	## Start Vagrant VM
-	@echo "Starting Vagrant environment for $(UBUNTU_VERSION)..."
-	@cd $(ANSIBLE_DIR) && vagrant up
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		ANSIBLE_DIR=$(ANSIBLE_DIR) \
+		./scripts/vagrant.sh up
 
 vagrant-provision:	## Re-run provisioning
-	@echo "Provisioning Vagrant environment for $(UBUNTU_VERSION)..."
-	@cd $(ANSIBLE_DIR) && vagrant provision
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		ANSIBLE_DIR=$(ANSIBLE_DIR) \
+		./scripts/vagrant.sh provision
 
 vagrant-destroy:	## Destroy Vagrant VM
-	@echo "Destroying Vagrant environment for $(UBUNTU_VERSION)..."
-	@cd $(ANSIBLE_DIR) && vagrant destroy -f
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		ANSIBLE_DIR=$(ANSIBLE_DIR) \
+		./scripts/vagrant.sh destroy
 
 vagrant-status:	## Show Vagrant status
-	@echo "Vagrant status for $(UBUNTU_VERSION):"
-	@cd $(ANSIBLE_DIR) && vagrant status
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		ANSIBLE_DIR=$(ANSIBLE_DIR) \
+		./scripts/vagrant.sh status
 
 vagrant-ssh:	## SSH into Vagrant box
-	@echo "SSH into $(UBUNTU_VERSION) Vagrant box..."
-	@cd $(ANSIBLE_DIR) && vagrant ssh
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		ANSIBLE_DIR=$(ANSIBLE_DIR) \
+		./scripts/vagrant.sh ssh
 
 vagrant-destroy-all:	## Destroy all VMs
-	@echo "Destroying all Vagrant environments..."
-	@cd ./noble && vagrant destroy -f 2>/dev/null || true
-	@cd ./jammy && vagrant destroy -f 2>/dev/null || true
+	@./scripts/vagrant.sh destroy-all
 
 vagrant-clean:	## Clean all VMs and cache
-	@echo "Cleaning all Vagrant environments..."
-	@$(MAKE) vagrant-destroy-all
-	@echo "Removing Vagrant global status entries..."
-	@vagrant global-status --prune
+	@./scripts/vagrant.sh clean
 
 proxmox-create:	## Create Proxmox VM from template
-	@echo "Creating Proxmox VM $(VM_NAME) (ID: $(VM_ID)) for $(UBUNTU_VERSION)..."
-	@if [ -z "$(PROXMOX_API_TOKEN_SECRET)" ]; then \
-		echo "Error: PROXMOX_API_TOKEN_SECRET not set. Please create .env file from .env.example"; \
-		exit 1; \
-	fi
-	@set -e; \
-	TMP_RESPONSE=$$(mktemp); \
-	HTTP_STATUS=$$(curl -k -sS -o $$TMP_RESPONSE -w '%{http_code}' "$(PROXMOX_API_URL)/nodes/$(PROXMOX_NODE)/qemu/$(TEMPLATE_ID)/clone" \
-		-H "Authorization: $(PROXMOX_AUTH)" \
-		-H "Content-Type: application/x-www-form-urlencoded" \
-		-d "newid=$(VM_ID)" \
-		-d "name=$(VM_NAME)" \
-		-d "target=$(PROXMOX_NODE)" \
-		-d "full=1"); \
-	RESPONSE=$$(cat $$TMP_RESPONSE); \
-	rm -f $$TMP_RESPONSE; \
-	if [ "$$HTTP_STATUS" = "000" ]; then \
-		echo "Error creating VM: request failed"; \
-		echo "$$RESPONSE"; \
-		exit 1; \
-	fi; \
-	if [ "$$HTTP_STATUS" -ge 400 ]; then \
-		echo "Error creating VM (HTTP $$HTTP_STATUS): $$RESPONSE"; \
-		exit 1; \
-	fi; \
-	if echo "$$RESPONSE" | grep -q '"message"'; then \
-		echo "Error creating VM: $$RESPONSE"; \
-		exit 1; \
-	fi; \
-	echo "$$RESPONSE"; \
-	echo "VM $(VM_NAME) created successfully"
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		PROXMOX_API_HOST=$(PROXMOX_API_HOST) \
+		PROXMOX_API_USER=$(PROXMOX_API_USER) \
+		PROXMOX_API_TOKEN_ID=$(PROXMOX_API_TOKEN_ID) \
+		PROXMOX_API_TOKEN_SECRET=$(PROXMOX_API_TOKEN_SECRET) \
+		PROXMOX_NODE=$(PROXMOX_NODE) \
+		TEMPLATE_ID_NOBLE=$(TEMPLATE_ID_NOBLE) \
+		TEMPLATE_ID_JAMMY=$(TEMPLATE_ID_JAMMY) \
+		VM_ID=$(VM_ID) \
+		VM_NAME=$(VM_NAME) \
+		VM_USER=$(VM_USER) \
+		PLAYBOOK=$(PLAYBOOK) \
+		ANSIBLE_DIR=$(ANSIBLE_DIR) \
+		TAGS=$(TAGS) \
+		./scripts/proxmox.sh create
 
 proxmox-provision:	## Provision VM with TTDAIU
-	@echo "Waiting for VM $(VM_NAME) to be ready..."
-	@sleep 10
-	@echo "Getting VM IP address..."
-	@VM_IP=$$(curl -k -s "$(PROXMOX_API_URL)/nodes/$(PROXMOX_NODE)/qemu/$(VM_ID)/agent/network-get-interfaces" \
-		-H "Authorization: $(PROXMOX_AUTH)" | \
-		grep -o '"ip-address":"[^"]*' | grep -v "127.0.0.1" | head -1 | cut -d'"' -f4); \
-	echo "VM IP: $$VM_IP"; \
-	if [ -n "$$VM_IP" ]; then \
-		echo "Provisioning VM with TTDAIU..."; \
-		cd $(ANSIBLE_DIR) && ansible-playbook $(PLAYBOOK) \
-			-i "$$VM_IP," \
-			-u $(VM_USER) \
-			$(if $(TAGS),--tags "$(TAGS)") \
-			--ask-become-pass; \
-	else \
-		echo "Could not get VM IP address. VM may not be ready yet."; \
-		exit 1; \
-	fi
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		PROXMOX_API_HOST=$(PROXMOX_API_HOST) \
+		PROXMOX_API_USER=$(PROXMOX_API_USER) \
+		PROXMOX_API_TOKEN_ID=$(PROXMOX_API_TOKEN_ID) \
+		PROXMOX_API_TOKEN_SECRET=$(PROXMOX_API_TOKEN_SECRET) \
+		PROXMOX_NODE=$(PROXMOX_NODE) \
+		TEMPLATE_ID_NOBLE=$(TEMPLATE_ID_NOBLE) \
+		TEMPLATE_ID_JAMMY=$(TEMPLATE_ID_JAMMY) \
+		VM_ID=$(VM_ID) \
+		VM_NAME=$(VM_NAME) \
+		VM_USER=$(VM_USER) \
+		PLAYBOOK=$(PLAYBOOK) \
+		ANSIBLE_DIR=$(ANSIBLE_DIR) \
+		TAGS=$(TAGS) \
+		./scripts/proxmox.sh provision
 
 proxmox-destroy:	## Destroy Proxmox VM
-	@echo "Destroying Proxmox VM $(VM_NAME) (ID: $(VM_ID))..."
-	@curl -k -X DELETE "$(PROXMOX_API_URL)/nodes/$(PROXMOX_NODE)/qemu/$(VM_ID)" \
-		-H "Authorization: $(PROXMOX_AUTH)" && \
-	echo "VM $(VM_NAME) destroyed successfully"
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		PROXMOX_API_HOST=$(PROXMOX_API_HOST) \
+		PROXMOX_API_USER=$(PROXMOX_API_USER) \
+		PROXMOX_API_TOKEN_ID=$(PROXMOX_API_TOKEN_ID) \
+		PROXMOX_API_TOKEN_SECRET=$(PROXMOX_API_TOKEN_SECRET) \
+		PROXMOX_NODE=$(PROXMOX_NODE) \
+		TEMPLATE_ID_NOBLE=$(TEMPLATE_ID_NOBLE) \
+		TEMPLATE_ID_JAMMY=$(TEMPLATE_ID_JAMMY) \
+		VM_ID=$(VM_ID) \
+		VM_NAME=$(VM_NAME) \
+		./scripts/proxmox.sh destroy
 
 proxmox-ssh:	## SSH into Proxmox VM
-	@echo "Getting VM IP for SSH connection..."
-	@VM_IP=$$(curl -k -s "$(PROXMOX_API_URL)/nodes/$(PROXMOX_NODE)/qemu/$(VM_ID)/agent/network-get-interfaces" \
-		-H "Authorization: $(PROXMOX_AUTH)" | \
-		grep -o '"ip-address":"[^"]*' | grep -v "127.0.0.1" | head -1 | cut -d'"' -f4); \
-	if [ -n "$$VM_IP" ]; then \
-		echo "Connecting to $(VM_NAME) at $$VM_IP..."; \
-		ssh -o StrictHostKeyChecking=no $(VM_USER)@$$VM_IP; \
-	else \
-		echo "Could not get VM IP address"; \
-		exit 1; \
-	fi
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		PROXMOX_API_HOST=$(PROXMOX_API_HOST) \
+		PROXMOX_API_USER=$(PROXMOX_API_USER) \
+		PROXMOX_API_TOKEN_ID=$(PROXMOX_API_TOKEN_ID) \
+		PROXMOX_API_TOKEN_SECRET=$(PROXMOX_API_TOKEN_SECRET) \
+		PROXMOX_NODE=$(PROXMOX_NODE) \
+		TEMPLATE_ID_NOBLE=$(TEMPLATE_ID_NOBLE) \
+		TEMPLATE_ID_JAMMY=$(TEMPLATE_ID_JAMMY) \
+		VM_ID=$(VM_ID) \
+		VM_NAME=$(VM_NAME) \
+		VM_USER=$(VM_USER) \
+		./scripts/proxmox.sh ssh
 
 proxmox-status:	## Show Proxmox VM status
-	@echo "Proxmox VM status for $(VM_NAME) (ID: $(VM_ID)):"
-	@curl -k -s "$(PROXMOX_API_URL)/nodes/$(PROXMOX_NODE)/qemu/$(VM_ID)/status/current" \
-		-H "Authorization: $(PROXMOX_AUTH)" | \
-		grep -o '"status":"[^"]*' | cut -d'"' -f4 || echo "VM not found"
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		PROXMOX_API_HOST=$(PROXMOX_API_HOST) \
+		PROXMOX_API_USER=$(PROXMOX_API_USER) \
+		PROXMOX_API_TOKEN_ID=$(PROXMOX_API_TOKEN_ID) \
+		PROXMOX_API_TOKEN_SECRET=$(PROXMOX_API_TOKEN_SECRET) \
+		PROXMOX_NODE=$(PROXMOX_NODE) \
+		TEMPLATE_ID_NOBLE=$(TEMPLATE_ID_NOBLE) \
+		TEMPLATE_ID_JAMMY=$(TEMPLATE_ID_JAMMY) \
+		VM_ID=$(VM_ID) \
+		VM_NAME=$(VM_NAME) \
+		./scripts/proxmox.sh status
 
 proxmox-list:	## List all test VMs
-	@echo "Listing all TTDAIU test VMs in Proxmox..."
-	@curl -k -s "$(PROXMOX_API_URL)/nodes/$(PROXMOX_NODE)/qemu" \
-		-H "Authorization: $(PROXMOX_AUTH)" | \
-		grep -o '"name":"ttdaiu-[^"]*' | cut -d'"' -f4 || echo "No TTDAIU VMs found"
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		PROXMOX_API_HOST=$(PROXMOX_API_HOST) \
+		PROXMOX_API_USER=$(PROXMOX_API_USER) \
+		PROXMOX_API_TOKEN_ID=$(PROXMOX_API_TOKEN_ID) \
+		PROXMOX_API_TOKEN_SECRET=$(PROXMOX_API_TOKEN_SECRET) \
+		PROXMOX_NODE=$(PROXMOX_NODE) \
+		TEMPLATE_ID_NOBLE=$(TEMPLATE_ID_NOBLE) \
+		TEMPLATE_ID_JAMMY=$(TEMPLATE_ID_JAMMY) \
+		VM_ID=$(VM_ID) \
+		VM_NAME=$(VM_NAME) \
+		./scripts/proxmox.sh list
 
 proxmox-clean:	## Clean all test VMs
-	@echo "Finding all TTDAIU test VMs..."
-	@VM_LIST=$$(curl -k -s "$(PROXMOX_API_URL)/nodes/$(PROXMOX_NODE)/qemu" \
-		-H "Authorization: $(PROXMOX_AUTH)" | \
-		grep -B2 -A2 '"name":"ttdaiu-' | grep '"vmid"' | grep -o '[0-9]*'); \
-	if [ -n "$$VM_LIST" ]; then \
-		echo "Found VMs: $$VM_LIST"; \
-		echo "This will destroy all TTDAIU test VMs. Continue? (y/N)"; \
-		read -r confirm; \
-		if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \
-			for vmid in $$VM_LIST; do \
-				echo "Destroying VM $$vmid..."; \
-				curl -k -X DELETE "$(PROXMOX_API_URL)/nodes/$(PROXMOX_NODE)/qemu/$$vmid" \
-					-H "Authorization: $(PROXMOX_AUTH)"; \
-			done; \
-			echo "All TTDAIU VMs destroyed"; \
-		else \
-			echo "Operation cancelled"; \
-		fi; \
-	else \
-		echo "No TTDAIU test VMs found"; \
-	fi
+	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
+		PROXMOX_API_HOST=$(PROXMOX_API_HOST) \
+		PROXMOX_API_USER=$(PROXMOX_API_USER) \
+		PROXMOX_API_TOKEN_ID=$(PROXMOX_API_TOKEN_ID) \
+		PROXMOX_API_TOKEN_SECRET=$(PROXMOX_API_TOKEN_SECRET) \
+		PROXMOX_NODE=$(PROXMOX_NODE) \
+		TEMPLATE_ID_NOBLE=$(TEMPLATE_ID_NOBLE) \
+		TEMPLATE_ID_JAMMY=$(TEMPLATE_ID_JAMMY) \
+		VM_ID=$(VM_ID) \
+		VM_NAME=$(VM_NAME) \
+		./scripts/proxmox.sh clean
 
 info:	## Show project information
 	@echo "Project: TTDAIU - Things to do after installing Ubuntu"
@@ -254,7 +253,4 @@ info:	## Show project information
 	@echo "Ansible version: $$(ansible --version | head -1 2>/dev/null || echo 'Not installed')"
 
 clean:	## Clean temporary files
-	@echo "Cleaning temporary files..."
-	@find . -name "*.retry" -delete 2>/dev/null || true
-	@find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
-	@find . -name "*.pyc" -delete 2>/dev/null || true
+	@./scripts/cleanup.sh
