@@ -56,14 +56,14 @@ help:	## Show this help
 	@grep -h -E '^proxmox-.*:.*## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
 	@echo ""
 	@echo "Usage examples:"
-	@echo "  make run                         # Run full setup (Noble/24.04)"
-	@echo "  make run UBUNTU_VERSION=jammy   # Run setup for Jammy/22.04"
-	@echo "  make run TAGS=packages         # Run only package-role tasks"
-	@echo "  make run TAGS=snap              # Run only snap-related tasks"
-	@echo "  make test                       # Run in testing environment"
-	@echo "  make run ENV=testing            # Run with testing inventory"
-	@echo "  make dry-run                    # Check what would be executed"
-	@echo "  make vagrant-up                 # Start Vagrant environment"
+	@printf "  %-32s # Run full setup (Noble/24.04)\n" "make run"
+	@printf "  %-32s # Run setup for Jammy/22.04\n" "make run UBUNTU_VERSION=jammy"
+	@printf "  %-32s # Run only package-role tasks\n" "make run TAGS=packages"
+	@printf "  %-32s # Run only snap-related tasks\n" "make run TAGS=snap"
+	@printf "  %-32s # Run in testing environment\n" "make test"
+	@printf "  %-32s # Run with testing inventory\n" "make run ENV=testing"
+	@printf "  %-32s # Check what would be executed\n" "make dry-run"
+	@printf "  %-32s # Start Vagrant environment\n" "make vagrant-up"
 
 run:	## Run Ansible playbook
 	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
