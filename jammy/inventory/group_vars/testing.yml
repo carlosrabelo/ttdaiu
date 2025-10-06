@@ -21,6 +21,7 @@ features:
   configure_bash: true
   setup_networking: true
   enable_backups: false  # Usually disabled in testing
+  install_ai_cli_tools: true
 
 # Jammy testing specific settings
 jammy_testing:

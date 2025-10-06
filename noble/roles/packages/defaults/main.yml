@@ -1,0 +1,167 @@
+---
+# Package lists organized by category
+# These variables define what packages to install for each category
+
+development_packages:
+  # Build tools and compilers
+  - autoconf
+  - automake
+  - build-essential
+  - g++
+  - make
+  - pkg-config
+
+  # Development libraries
+  - libcurl4-openssl-dev
+  - libgmp-dev
+  - libjansson-dev
+  - libssl-dev
+  - python3-dev
+  - zlib1g-dev
+
+  # SDL2 development libraries
+  - libsdl2-dev
+  - libsdl2-gfx-dev
+  - libsdl2-image-dev
+  - libsdl2-mixer-dev
+  - libsdl2-net-dev
+  - libsdl2-ttf-dev
+
+  # Version control and tools
+  - git
+  - curl
+
+  # Programming languages and tools
+  - default-jdk
+  - default-jre
+  - gradle
+  - python3-pip
+  - python3-virtualenv
+  - python-is-python3
+
+  # Python development tools
+  - black
+  - python3-paramiko
+  - python3-pep8
+  - python3-pylint-celery
+  - python3-pylint-flask
+  - python3-pylint-plugin-utils
+
+  # PHP development
+  - php-cli
+  - php-gd
+  - php-imagick
+  - php-mysql
+  - php-snmp
+
+  # Database tools
+  - postgresql-client
+
+  # Static site generators
+  - hugo
+  - jekyll
+
+network_packages:
+  # Network analysis and utilities
+  - arp-scan
+  - avahi-autoipd
+  - avahi-utils
+  - net-tools
+  - nmap
+
+  # VPN and connection management
+  - network-manager-l2tp
+  - network-manager-l2tp-gnome
+  - network-manager-openconnect
+  - network-manager-openconnect-gnome
+
+  # SSH tools
+  - openssh-server
+  - ssh-askpass
+  - ssh-tools
+  - sshpass
+
+  # Security and privacy
+  - gufw
+  - tor
+
+  # Cloud and sync tools
+  - rclone
+
+media_packages:
+  # Audio and video
+  - vlc
+  - audacity
+  - lmms
+  - ffmpeg
+
+  # Speech synthesis
+  - libspeechd2
+
+graphics_packages:
+  # Image editing and creation
+  - gimp
+  - inkscape
+  - mypaint
+  - imagemagick
+
+  # Font support
+  - xfonts-75dpi
+  - xfonts-100dpi
+
+productivity_packages:
+  # File management and comparison
+  - meld
+  - bleachbit
+  - mc
+
+  # System tweaks and remote access
+  - gnome-tweaks
+  - remmina
+  - filezilla
+
+  # Document viewers
+  - evince
+
+  # PDF generation
+  - wkhtmltopdf
+
+  # QR code generation
+  - qrencode
+
+  # Dotfile management
+  - yadm
+
+latex_packages:
+  # Core LaTeX installation
+  - texlive
+  - texlive-lang-portuguese
+  - texlive-latex-extra
+  - texlive-publishers
+
+  # LaTeX editor
+  - texstudio
+  - texstudio-doc
+  - texstudio-l10n
+
+system_utilities:
+  # System monitoring
+  - btop
+  - htop
+  - preload
+
+  # Terminal tools
+  - neovim
+  - screen
+  - tree
+
+  # Process management
+  - supervisor
+
+  # Gaming engine
+  - love
+
+# Package management settings
+apt_cache_valid_time: 3600
+apt_upgrade_type: "dist"
+apt_clean_cache: true

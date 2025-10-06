@@ -1,6 +1,5 @@
 ---
-- snap:
-    classic: yes
+- name: Install Chromium snap
+  ansible.builtin.snap:
+    name: chromium
     state: present
-    name:
-      - chromium

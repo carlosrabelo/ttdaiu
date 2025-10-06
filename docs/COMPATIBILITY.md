@@ -65,12 +65,15 @@ All APT packages used in Noble are compatible with Jammy:
 All snap packages are compatible across versions:
 
 ✅ **Fully Compatible**
-- Docker
 - Go
 - Node.js
 - Visual Studio Code
 - Chromium
 - LibreOffice
+- Docker (when opting into the Snap-based installation)
+
+ℹ️ **Default Runtime**
+- Docker now installs from the upstream APT repository by default on both Noble and Jammy. Switch to the Snap build by setting `docker_install_method: snap` in the desired inventory or extra vars.
 
 ### Package Management Changes
 
@@ -160,6 +163,7 @@ Both versions support the same feature flags:
 - `configure_bash`
 - `setup_networking`
 - `enable_backups`
+- `install_ai_cli_tools`
 
 ### Inventory Structure
 Both versions use identical inventory structure:

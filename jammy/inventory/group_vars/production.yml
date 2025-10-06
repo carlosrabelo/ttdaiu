@@ -21,6 +21,7 @@ features:
   configure_bash: true
   setup_networking: true
   enable_backups: true             # Always enabled in production
+  install_ai_cli_tools: false
 
 # Production backup settings
 backup_keep_days: 90

@@ -33,3 +33,8 @@
 - name: Update apt cache after adding GitHub CLI repository
   ansible.builtin.apt:
     update_cache: true
+
+- name: Install GitHub CLI
+  ansible.builtin.apt:
+    name: gh
+    state: present

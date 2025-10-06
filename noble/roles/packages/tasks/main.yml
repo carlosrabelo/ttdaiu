@@ -37,6 +37,7 @@
   retries: 2
   delay: 10
   until: dev_packages_result is succeeded
+  when: features.install_development_tools | default(true)
   tags: [development, dev]
 
 - name: Install network packages
@@ -47,6 +48,7 @@
   retries: 2
   delay: 10
   until: network_packages_result is succeeded
+  when: features.setup_networking | default(true)
   tags: [network]
 
 - name: Install media packages
@@ -57,6 +59,7 @@
   retries: 2
   delay: 10
   until: media_packages_result is succeeded
+  when: features.install_media_tools | default(true)
   tags: [media]
 
 - name: Install graphics packages
@@ -67,6 +70,7 @@
   retries: 2
   delay: 10
   until: graphics_packages_result is succeeded
+  when: features.install_media_tools | default(true)
   tags: [graphics]
 
 - name: Install productivity packages
@@ -77,6 +81,7 @@
   retries: 2
   delay: 10
   until: productivity_packages_result is succeeded
+  when: features.install_productivity_tools | default(true)
   tags: [productivity]
 
 - name: Install LaTeX packages

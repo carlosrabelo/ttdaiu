@@ -16,22 +16,10 @@ apt_update_cache: true
 apt_cache_valid_time: 3600
 apt_upgrade_type: "dist"
 
-# Snap configuration
-snap_classic_packages:
-  - go
-  - docker
-  - code
-  - codium
-  - node
-
-snap_strict_packages:
-  - chromium
-  - libreoffice
-
 # Development tools configuration
 golang_install_method: "snap"  # Options: snap, manual, apt
 nodejs_install_method: "snap"  # Options: snap, nvm, apt
-docker_install_method: "snap"  # Options: snap, apt
+docker_install_method: "apt"   # Options: snap, apt
 
 # Network configuration
 network_manager_plugins:
@@ -39,38 +27,6 @@ network_manager_plugins:
   - network-manager-l2tp-gnome
   - network-manager-openconnect
   - network-manager-openconnect-gnome
-
-# Media and productivity packages
-media_packages:
-  - vlc
-  - audacity
-  - lmms
-
-graphics_packages:
-  - gimp
-  - inkscape
-  - mypaint
-
-productivity_packages:
-  - meld
-  - bleachbit
-  - gnome-tweaks
-  - remmina
-  - filezilla
-
-# LaTeX configuration
-latex_packages:
-  - texlive
-  - texlive-lang-portuguese
-  - texlive-latex-extra
-  - texlive-publishers
-  - texstudio
-  - texstudio-doc
-  - texstudio-l10n
-
-# Gaming and misc
-misc_packages:
-  - love  # Love2D game engine
 
 # Backup configuration
 backup_enabled: false
@@ -93,6 +49,7 @@ features:
   configure_bash: true
   setup_networking: true
   enable_backups: false
+  install_ai_cli_tools: true
 
 # Performance settings
 parallel_downloads: 5

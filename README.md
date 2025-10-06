@@ -10,6 +10,7 @@ Automated post-installation setup for Ubuntu using Ansible. This project helps y
 - **System optimization** and configuration
 - **Multiple testing environments** (Vagrant and Proxmox VE)
 - **Flexible execution** with tag-based filtering
+- **Optional AI coding CLIs** (Codex, Claude, Gemini) controlled by feature flags
 
 ## Supported Versions
 
@@ -82,10 +83,11 @@ make dry-run UBUNTU_VERSION=jammy  # Jammy version
 - **Networking**: FileZilla, Remmina
 
 ### Snap Packages
-- **Development**: Go, Node.js, Docker
+- **Development**: Go, Node.js
 - **Editors**: Visual Studio Code, VSCodium
 - **Browsers**: Chromium
 - **Office**: LibreOffice (if not installed via APT)
+- **Container runtime (optional)**: Docker, when `docker_install_method=snap`
 
 ### Configuration Files
 - Enhanced bash configuration with aliases and extras
@@ -204,7 +206,7 @@ ttdaiu/
 
 ### Adding Software
 
-1. **APT packages**: Edit `noble/roles/packages/vars/main.yml` and add to appropriate category
+1. **APT packages**: Edit `noble/roles/packages/defaults/main.yml` (and `jammy/roles/packages/defaults/main.yml` if needed) and add to appropriate category
 2. **Snap packages**: Create or edit relevant role in `noble/roles/`
 3. **Custom configurations**: Add files to role `files/` directories
 
@@ -213,8 +215,47 @@ ttdaiu/
 Use tags to install only what you need:
 
 - `packages` - All APT-based installations
-- `snap` - All Snap-based installations
+- `snap` - All Snap-based installations (Chromium, VS Code, VSCodium, Go, Node.js, LibreOffice)
 - Individual role names (e.g., `golang`, `docker`, `nginx`)
+
+### Feature Flags
+
+Toggle groups of tasks globally by adjusting the `features` dictionary in the relevant inventory or `group_vars/all.yml` file. Available flags:
+
+- `install_development_tools`
+- `install_media_tools`
+- `install_productivity_tools`
+- `install_latex_tools`
+- `configure_bash`
+- `setup_networking`
+- `enable_backups`
+- `install_ai_cli_tools`
+
+Override temporarily by running the playbook directly:
+
+```bash
+cd noble
+ansible-playbook site.yml -i inventory/production.ini \
+  -e '{"features": {"install_ai_cli_tools": false}}' \
+  --ask-become-pass
+```
+
+> Substitua `noble` por `jammy` para trabalhar com o playbook de Ubuntu 22.04.
+
+### Docker Installation Method
+
+Docker defaults to the official APT repository. Switch to the Snap build by setting:
+
+```bash
+cd noble
+ansible-playbook site.yml -i inventory/production.ini \
+  -e '{"docker_install_method": "snap"}' \
+  --tags docker --ask-become-pass
+```
+
+> Substitua `noble` por `jammy` para trabalhar com o playbook de Ubuntu 22.04.
+
+Set this permanently by editing `group_vars/all.yml` or the inventory group vars for your environment.
 
 ### Environment Variables
 
