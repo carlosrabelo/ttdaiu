@@ -1,0 +1,16 @@
+---
+- name: Check if @openai/codex is installed globally
+  become: true
+  ansible.builtin.command: npm list -g @openai/codex --depth=0
+  environment:
+    PATH: "/snap/bin:{{ ansible_env.PATH }}"
+  register: codex_npm_installed
+  failed_when: codex_npm_installed.rc not in [0, 1]
+  changed_when: false
+
+- name: Install @openai/codex globally
+  become: true
+  ansible.builtin.command: npm install -g @openai/codex
+  environment:
+    PATH: "/snap/bin:{{ ansible_env.PATH }}"
+  when: codex_npm_installed.rc == 1
