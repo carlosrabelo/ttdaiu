@@ -142,13 +142,31 @@ proxmox-create:	## Create Proxmox VM from template
 		echo "Error: PROXMOX_API_TOKEN_SECRET not set. Please create .env file from .env.example"; \
 		exit 1; \
 	fi
-	@curl -k -X POST "$(PROXMOX_API_URL)/nodes/$(PROXMOX_NODE)/qemu/$(TEMPLATE_ID)/clone" \
+	@set -e; \
+	TMP_RESPONSE=$$(mktemp); \
+	HTTP_STATUS=$$(curl -k -sS -o $$TMP_RESPONSE -w '%{http_code}' "$(PROXMOX_API_URL)/nodes/$(PROXMOX_NODE)/qemu/$(TEMPLATE_ID)/clone" \
 		-H "Authorization: $(PROXMOX_AUTH)" \
 		-H "Content-Type: application/x-www-form-urlencoded" \
 		-d "newid=$(VM_ID)" \
 		-d "name=$(VM_NAME)" \
 		-d "target=$(PROXMOX_NODE)" \
-		-d "full=1" && \
+		-d "full=1"); \
+	RESPONSE=$$(cat $$TMP_RESPONSE); \
+	rm -f $$TMP_RESPONSE; \
+	if [ "$$HTTP_STATUS" = "000" ]; then \
+		echo "Error creating VM: request failed"; \
+		echo "$$RESPONSE"; \
+		exit 1; \
+	fi; \
+	if [ "$$HTTP_STATUS" -ge 400 ]; then \
+		echo "Error creating VM (HTTP $$HTTP_STATUS): $$RESPONSE"; \
+		exit 1; \
+	fi; \
+	if echo "$$RESPONSE" | grep -q '"message"'; then \
+		echo "Error creating VM: $$RESPONSE"; \
+		exit 1; \
+	fi; \
+	echo "$$RESPONSE"; \
 	echo "VM $(VM_NAME) created successfully"
 
 proxmox-provision:	## Provision VM with TTDAIU
