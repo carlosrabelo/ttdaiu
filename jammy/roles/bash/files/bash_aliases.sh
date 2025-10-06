@@ -14,6 +14,9 @@ alias git-clean-reset-fetch='git fetch origin && git reset --hard origin/$(git b
 alias git-add-commit-time='git add . && git commit -m "`date \"+%Y-%m-%d %H:%M\"`" && git push origin master'
 
 #
+alias git-squash-commit='git reset $(git commit-tree HEAD^{tree} -m "Initial commit")'
+
+#
 alias docker-clear-containers='docker ps --no-trunc -aqf "status=exited" | xargs -r docker rm'
 alias docker-clear-images='docker images --no-trunc -aqf "dangling=true" | xargs -r docker rmi'
 alias docker-clear-volumes='docker volume ls -qf "dangling=true" | xargs -r docker volume rm'
