@@ -44,10 +44,11 @@ make run                           # Ubuntu 24.04 (Noble) - Default
 make run UBUNTU_VERSION=jammy     # Ubuntu 22.04 (Jammy)
 ```
 
-Or run specific tests:
+Or run with different environments:
 
 ```bash
-make test                          # Run in testing environment
+make full                          # Run in full environment (all features)
+make run ENV=base                  # Run in base environment (minimal)
 make dry-run                       # Preview changes
 ```
 
@@ -55,7 +56,8 @@ Run specific components only:
 
 ```bash
 make run TAGS=packages                     # Install APT packages only
-make run TAGS=snap                          # Install Snap packages only
+make run TAGS=snap                         # Install Snap packages only
+make run TAGS=iacode ENV=full              # Install AI CLI tools (requires full environment)
 make run TAGS=golang UBUNTU_VERSION=jammy  # Install Go on Ubuntu 22.04
 make run TAGS=docker UBUNTU_VERSION=noble  # Install Docker on Ubuntu 24.04
 ```
@@ -95,9 +97,16 @@ make dry-run UBUNTU_VERSION=jammy  # Jammy version
 
 ## Advanced Usage
 
+### Environment Types
+
+The project supports two configuration environments:
+
+- **Base Environment** (`ENV=base`): Minimal setup with essential features only (backup, packages, bash)
+- **Full Environment** (`ENV=full`): Complete setup with all features enabled (development tools, AI CLIs, media tools, etc.)
+
 ### Testing Environments
 
-The project supports two testing environments for comprehensive playbook validation:
+The project supports two testing platforms for comprehensive playbook validation:
 
 #### Vagrant (Development Testing)
 
@@ -182,8 +191,8 @@ ttdaiu/
 │   ├── Vagrantfile           # Vagrant configuration for Noble
 │   ├── group_vars/           # Global variables
 │   ├── inventory/            # Inventory files with multi-environment support
-│   │   ├── production.ini    # Production inventory
-│   │   ├── testing.ini       # Testing inventory
+│   │   ├── base.ini          # Base environment inventory
+│   │   ├── full.ini          # Full environment inventory
 │   │   └── group_vars/       # Environment-specific variables
 │   └── roles/                # Ansible roles
 │       ├── packages/         # Consolidated package management
@@ -235,7 +244,7 @@ Override temporarily by running the playbook directly:
 
 ```bash
 cd noble
-ansible-playbook site.yml -i inventory/production.ini \
+ansible-playbook site.yml -i inventory/base.ini \
   -e '{"features": {"install_ai_cli_tools": false}}' \
   --ask-become-pass
 ```
@@ -248,7 +257,7 @@ Docker defaults to the official APT repository. Switch to the Snap build by sett
 
 ```bash
 cd noble
-ansible-playbook site.yml -i inventory/production.ini \
+ansible-playbook site.yml -i inventory/base.ini \
   -e '{"docker_install_method": "snap"}' \
   --tags docker --ask-become-pass
 ```
