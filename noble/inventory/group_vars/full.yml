@@ -1,10 +1,10 @@
-# Testing environment specific variables for Jammy
+# Full environment specific variables
 
-# Enable more verbose output for testing
+# Enable verbose output for full environment
 ansible_verbosity: 2
 
-# Testing-specific package selections
-test_packages:
+# Full environment package selections
+full_packages:
   - stress
   - htop
   - tree
@@ -22,10 +22,3 @@ features:
   setup_networking: true
   enable_backups: false  # Usually disabled in testing
   install_ai_cli_tools: true
-
-# Jammy testing specific settings
-jammy_testing:
-  # Test compatibility mode for older packages
-  compatibility_mode: true
-  # Enable experimental features for testing
-  experimental_features: true

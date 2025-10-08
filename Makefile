@@ -11,10 +11,10 @@ endif
 UBUNTU_VERSION	?= noble
 ANSIBLE_DIR	= ./$(UBUNTU_VERSION)
 PLAYBOOK	= site.yml
-INVENTORY	= inventory/production.ini
-TESTING_INVENTORY = inventory/testing.ini
+INVENTORY	= inventory/base.ini
+FULL_INVENTORY = inventory/full.ini
 TAGS		?= all
-ENV		?= production
+ENV		?= base
 
 # Proxmox settings (can be overridden by .env)
 PROXMOX_API_HOST	?= 192.168.1.100
@@ -41,7 +41,7 @@ PROXMOX_API_URL = https://$(PROXMOX_API_HOST):8006/api2/json
 # Default target - show help
 .DEFAULT_GOAL := help
 
-.PHONY: help run check syntax lint deps install-deps vagrant-up vagrant-provision vagrant-destroy vagrant-status vagrant-ssh vagrant-destroy-all vagrant-clean proxmox-create proxmox-provision proxmox-destroy proxmox-ssh proxmox-status proxmox-list proxmox-clean dry-run test
+.PHONY: help run check syntax lint deps install-deps vagrant-up vagrant-provision vagrant-destroy vagrant-status vagrant-ssh vagrant-destroy-all vagrant-clean proxmox-create proxmox-provision proxmox-destroy proxmox-ssh proxmox-status proxmox-list proxmox-clean dry-run full
 
 help:	## Show this help
 	@echo "TTDAIU - Things to do after installing Ubuntu"
@@ -60,8 +60,8 @@ help:	## Show this help
 	@printf "  %-32s # Run setup for Jammy/22.04\n" "make run UBUNTU_VERSION=jammy"
 	@printf "  %-32s # Run only package-role tasks\n" "make run TAGS=packages"
 	@printf "  %-32s # Run only snap-related tasks\n" "make run TAGS=snap"
-	@printf "  %-32s # Run in testing environment\n" "make test"
-	@printf "  %-32s # Run with testing inventory\n" "make run ENV=testing"
+	@printf "  %-32s # Run in full environment\n" "make full"
+	@printf "  %-32s # Run with full inventory\n" "make run ENV=full"
 	@printf "  %-32s # Check what would be executed\n" "make dry-run"
 	@printf "  %-32s # Start Vagrant environment\n" "make vagrant-up"
 
@@ -70,7 +70,7 @@ run:	## Run Ansible playbook
 		ANSIBLE_DIR=$(ANSIBLE_DIR) \
 		PLAYBOOK=$(PLAYBOOK) \
 		INVENTORY=$(INVENTORY) \
-		TESTING_INVENTORY=$(TESTING_INVENTORY) \
+		FULL_INVENTORY=$(FULL_INVENTORY) \
 		TAGS=$(TAGS) \
 		ENV=$(ENV) \
 		./scripts/run-ansible.sh run
@@ -80,20 +80,20 @@ dry-run:	## Run in check mode (preview changes)
 		ANSIBLE_DIR=$(ANSIBLE_DIR) \
 		PLAYBOOK=$(PLAYBOOK) \
 		INVENTORY=$(INVENTORY) \
-		TESTING_INVENTORY=$(TESTING_INVENTORY) \
+		FULL_INVENTORY=$(FULL_INVENTORY) \
 		TAGS=$(TAGS) \
 		ENV=$(ENV) \
 		./scripts/run-ansible.sh dry-run
 
-test:	## Run in testing environment
+full:	## Run in full environment
 	@UBUNTU_VERSION=$(UBUNTU_VERSION) \
 		ANSIBLE_DIR=$(ANSIBLE_DIR) \
 		PLAYBOOK=$(PLAYBOOK) \
 		INVENTORY=$(INVENTORY) \
-		TESTING_INVENTORY=$(TESTING_INVENTORY) \
+		FULL_INVENTORY=$(FULL_INVENTORY) \
 		TAGS=$(TAGS) \
 		ENV=$(ENV) \
-		./scripts/run-ansible.sh test
+		./scripts/run-ansible.sh full
 
 
 check: syntax	## Check syntax and configuration

@@ -4,17 +4,17 @@ set -euo pipefail
 MODE=${1:-}
 
 if [[ -z "${MODE}" ]]; then
-  echo "Usage: $0 <run|dry-run|test>" >&2
+  echo "Usage: $0 <run|dry-run|full>" >&2
   exit 1
 fi
 
 UBUNTU_VERSION=${UBUNTU_VERSION:-noble}
 ANSIBLE_DIR=${ANSIBLE_DIR:-./${UBUNTU_VERSION}}
 PLAYBOOK=${PLAYBOOK:-site.yml}
-INVENTORY=${INVENTORY:-inventory/production.ini}
-TESTING_INVENTORY=${TESTING_INVENTORY:-inventory/testing.ini}
+INVENTORY=${INVENTORY:-inventory/base.ini}
+FULL_INVENTORY=${FULL_INVENTORY:-inventory/full.ini}
 TAGS=${TAGS:-all}
-ENVIRONMENT=${ENV:-production}
+ENVIRONMENT=${ENV:-base}
 
 if [[ ! -d "${ANSIBLE_DIR}" ]]; then
   echo "Ansible directory not found: ${ANSIBLE_DIR}" >&2
@@ -27,28 +27,28 @@ extra_args=()
 case "${MODE}" in
   run)
     echo "Running TTDAIU setup (${ENVIRONMENT} environment)..."
-    if [[ "${ENVIRONMENT}" == "testing" ]]; then
-      inventory_path="${TESTING_INVENTORY}"
+    if [[ "${ENVIRONMENT}" == "full" ]]; then
+      inventory_path="${FULL_INVENTORY}"
     else
       inventory_path="${INVENTORY}"
     fi
     ;;
   dry-run)
     echo "Running TTDAIU setup in check mode (${ENVIRONMENT} environment)..."
-    if [[ "${ENVIRONMENT}" == "testing" ]]; then
-      inventory_path="${TESTING_INVENTORY}"
+    if [[ "${ENVIRONMENT}" == "full" ]]; then
+      inventory_path="${FULL_INVENTORY}"
     else
       inventory_path="${INVENTORY}"
     fi
     extra_args+=(--check --diff)
     ;;
-  test)
-    echo "Running TTDAIU setup in testing environment..."
-    inventory_path="${TESTING_INVENTORY}"
+  full)
+    echo "Running TTDAIU setup in full environment..."
+    inventory_path="${FULL_INVENTORY}"
     ;;
   *)
     echo "Invalid mode: ${MODE}" >&2
-    echo "Usage: $0 <run|dry-run|test>" >&2
+    echo "Usage: $0 <run|dry-run|full>" >&2
     exit 1
     ;;
 esac
