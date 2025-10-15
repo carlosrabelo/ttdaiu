@@ -47,7 +47,9 @@
   retries: 2
   delay: 30
   until: apt_upgrade_result is succeeded
-  when: apt_upgrade_type is defined
+  when: 
+    - apt_upgrade_type is defined
+    - not ansible_check_mode
   async: 1800
   poll: 30
   tags: [system, upgrade]
@@ -64,6 +66,7 @@
   when: 
     - features.install_development_tools | default(true)
     - parallel_install
+    - not ansible_check_mode
   async: 600
   poll: 10
   tags: [development, packages, parallel]
@@ -93,6 +96,7 @@
   when: 
     - features.setup_networking | default(true)
     - parallel_install
+    - not ansible_check_mode
   async: 600
   poll: 10
   tags: [network, packages, parallel]
@@ -122,6 +126,7 @@
   when: 
     - features.install_media_tools | default(true)
     - parallel_install
+    - not ansible_check_mode
   async: 1200
   poll: 15
   tags: [media, packages, parallel]
@@ -151,6 +156,7 @@
   when: 
     - features.install_media_tools | default(true)
     - parallel_install
+    - not ansible_check_mode
   async: 900
   poll: 15
   tags: [graphics, packages, parallel]
@@ -180,6 +186,7 @@
   when: 
     - features.install_productivity_tools | default(true)
     - parallel_install
+    - not ansible_check_mode
   async: 900
   poll: 15
   tags: [productivity, packages, parallel]
@@ -209,6 +216,7 @@
   when: 
     - features.install_latex_tools | default(true)
     - parallel_install
+    - not ansible_check_mode
   async: 1800
   poll: 20
   tags: [latex, packages, parallel]
@@ -235,7 +243,9 @@
   retries: 2
   delay: 10
   until: system_utilities_result is succeeded
-  when: parallel_install
+  when: 
+    - parallel_install
+    - not ansible_check_mode
   async: 600
   poll: 10
   tags: [utilities, packages, parallel]
@@ -256,7 +266,9 @@
   ansible.builtin.apt:
     autoclean: true
     autoremove: true
-  when: apt_clean_cache | default(true)
+  when: 
+    - apt_clean_cache | default(true)
+    - not ansible_check_mode
   async: 300
   poll: 10
   tags: [cleanup, optimization]

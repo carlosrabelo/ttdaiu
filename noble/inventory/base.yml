@@ -1,0 +1,28 @@
+# Production environment inventory
+# For real systems and production deployments
+
+all:
+  children:
+    production:
+      children:
+        local:
+          hosts:
+            localhost:
+              ansible_connection: local
+      vars:
+        # Production-specific settings
+        backup_enabled: true
+        debug_mode: false
+        apt_upgrade_type: safe
+        log_level: warn
+        
+        # Base environment features - disable development tools to avoid Docker in CI
+        features:
+          install_development_tools: false
+          install_media_tools: false
+          install_productivity_tools: false
+          install_latex_tools: false
+          configure_bash: true
+          setup_networking: false
+          enable_backups: true
+          install_ai_cli_tools: false
