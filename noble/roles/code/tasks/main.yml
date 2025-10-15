@@ -1,0 +1,6 @@
+---
+- snap:
+    classic: yes
+    state: present
+    name:
+      - code

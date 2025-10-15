@@ -1,0 +1,5 @@
+---
+- name: Install LibreOffice snap
+  ansible.builtin.snap:
+    name: libreoffice
+    state: present

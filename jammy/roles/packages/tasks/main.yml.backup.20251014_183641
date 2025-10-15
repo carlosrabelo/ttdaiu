@@ -1,0 +1,126 @@
+---
+# Consolidated package management role
+# Replaces apt1 and apt2 with better organization and error handling
+
+- name: Update package cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time | default(3600) }}"
+  register: apt_update_result
+  retries: 3
+  delay: 10
+  until: apt_update_result is succeeded
+
+- name: Perform system upgrade
+  ansible.builtin.apt:
+    upgrade: "{{ apt_upgrade_type | default('dist') }}"
+  register: apt_upgrade_result
+  retries: 2
+  delay: 30
+  until: apt_upgrade_result is succeeded
+  when: apt_upgrade_type is defined
+
+- name: Install restricted extras
+  ansible.builtin.apt:
+    pkg:
+      - ubuntu-restricted-extras
+    state: present
+  register: restricted_extras_result
+  failed_when: false  # This might fail due to license acceptance
+  tags: [restricted]
+
+- name: Install development packages
+  ansible.builtin.apt:
+    pkg: "{{ development_packages }}"
+    state: present
+  register: dev_packages_result
+  retries: 2
+  delay: 10
+  until: dev_packages_result is succeeded
+  when: features.install_development_tools | default(true)
+  tags: [development, dev]
+
+- name: Install network packages
+  ansible.builtin.apt:
+    pkg: "{{ network_packages }}"
+    state: present
+  register: network_packages_result
+  retries: 2
+  delay: 10
+  until: network_packages_result is succeeded
+  when: features.setup_networking | default(true)
+  tags: [network]
+
+- name: Install media packages
+  ansible.builtin.apt:
+    pkg: "{{ media_packages }}"
+    state: present
+  register: media_packages_result
+  retries: 2
+  delay: 10
+  until: media_packages_result is succeeded
+  when: features.install_media_tools | default(true)
+  tags: [media]
+
+- name: Install graphics packages
+  ansible.builtin.apt:
+    pkg: "{{ graphics_packages }}"
+    state: present
+  register: graphics_packages_result
+  retries: 2
+  delay: 10
+  until: graphics_packages_result is succeeded
+  when: features.install_media_tools | default(true)
+  tags: [graphics]
+
+- name: Install productivity packages
+  ansible.builtin.apt:
+    pkg: "{{ productivity_packages }}"
+    state: present
+  register: productivity_packages_result
+  retries: 2
+  delay: 10
+  until: productivity_packages_result is succeeded
+  when: features.install_productivity_tools | default(true)
+  tags: [productivity]
+
+- name: Install LaTeX packages
+  ansible.builtin.apt:
+    pkg: "{{ latex_packages }}"
+    state: present
+  register: latex_packages_result
+  retries: 2
+  delay: 10
+  until: latex_packages_result is succeeded
+  when: features.install_latex_tools | default(true)
+  tags: [latex, documents]
+
+- name: Install system utilities
+  ansible.builtin.apt:
+    pkg: "{{ system_utilities }}"
+    state: present
+  register: system_utilities_result
+  retries: 2
+  delay: 10
+  until: system_utilities_result is succeeded
+  tags: [utilities, system]
+
+- name: Clean package cache
+  ansible.builtin.apt:
+    autoclean: true
+    autoremove: true
+  when: apt_clean_cache | default(true)
+  tags: [cleanup]
+
+- name: Display installation summary
+  ansible.builtin.debug:
+    msg: |
+      Package installation summary:
+      - Development packages: {{ 'OK' if dev_packages_result is succeeded else 'FAILED' }}
+      - Network packages: {{ 'OK' if network_packages_result is succeeded else 'FAILED' }}
+      - Media packages: {{ 'OK' if media_packages_result is succeeded else 'FAILED' }}
+      - Graphics packages: {{ 'OK' if graphics_packages_result is succeeded else 'FAILED' }}
+      - Productivity packages: {{ 'OK' if productivity_packages_result is succeeded else 'FAILED' }}
+      - LaTeX packages: {{ 'OK' if latex_packages_result is succeeded else 'FAILED' }}
+      - System utilities: {{ 'OK' if system_utilities_result is succeeded else 'FAILED' }}
+  tags: [summary]

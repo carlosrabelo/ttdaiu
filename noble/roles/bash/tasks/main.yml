@@ -1,0 +1,28 @@
+---
+- copy:
+    src: bash_aliases.sh
+    dest: "{{ main_home }}/.bash_aliases"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: u+rw,g+r
+
+- copy:
+    src: bash_extras.sh
+    dest: "{{ main_home }}/.bash_extras"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: u+rw,g+r
+
+- copy:
+    src: bashrc.sh
+    dest: "{{ main_home }}/.bashrc"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: u+rw,g+r
+
+- copy:
+    src: profile.sh
+    dest: "{{ main_home }}/.profile"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: u+rw,g+r

@@ -1,0 +1,16 @@
+---
+- name: Check if @anthropic-ai/claude-code is installed globally
+  become: true
+  ansible.builtin.command: npm list -g @anthropic-ai/claude-code --depth=0
+  environment:
+    PATH: "/snap/bin:{{ ansible_env.PATH }}"
+  register: claude_npm_installed
+  failed_when: claude_npm_installed.rc not in [0, 1]
+  changed_when: false
+
+- name: Install @anthropic-ai/claude-code globally
+  become: true
+  ansible.builtin.command: npm install -g @anthropic-ai/claude-code
+  environment:
+    PATH: "/snap/bin:{{ ansible_env.PATH }}"
+  when: claude_npm_installed.rc == 1

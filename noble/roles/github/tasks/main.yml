@@ -1,0 +1,40 @@
+---
+- name: Ensure wget package is installed
+  ansible.builtin.apt:
+    name: wget
+    state: present
+
+- name: Ensure /etc/apt/keyrings exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download GitHub CLI signing key
+  ansible.builtin.get_url:
+    url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    dest: /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    mode: '0644'
+    force: false
+
+- name: Ensure /etc/apt/sources.list.d exists
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d
+    state: directory
+    mode: '0755'
+
+- name: Configure GitHub CLI apt repository
+  ansible.builtin.copy:
+    content: |
+      deb [signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
+    dest: /etc/apt/sources.list.d/github-cli.list
+    mode: '0644'
+
+- name: Update apt cache after adding GitHub CLI repository
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install GitHub CLI
+  ansible.builtin.apt:
+    name: gh
+    state: present

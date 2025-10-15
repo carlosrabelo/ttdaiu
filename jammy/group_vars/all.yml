@@ -1,0 +1,73 @@
+---
+# Global variables for TTDAIU project - Ubuntu 22.04 Jammy
+# These variables are available to all hosts and roles
+
+# System configuration
+ttdaiu_version: "1.0.0"
+ubuntu_version: "22.04"
+ubuntu_codename: "jammy"
+
+# User configuration (overridden in site.yml if needed)
+main_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+main_home: "{{ '/home/' + (ansible_env.SUDO_USER | default(ansible_user_id)) }}"
+
+# Package management settings
+apt_update_cache: true
+apt_cache_valid_time: 3600
+apt_upgrade_type: "dist"
+
+# Development tools configuration
+golang_install_method: "snap"  # Options: snap, manual, apt
+nodejs_install_method: "snap"  # Options: snap, nvm, apt
+docker_install_method: "apt"   # Options: snap, apt
+
+# Network configuration
+network_manager_plugins:
+  - network-manager-l2tp
+  - network-manager-l2tp-gnome
+  - network-manager-openconnect
+  - network-manager-openconnect-gnome
+
+# Backup configuration
+backup_enabled: false
+backup_directories:
+  - "{{ main_home }}/.bashrc"
+  - "{{ main_home }}/.bash_aliases"
+  - "{{ main_home }}/.profile"
+  - "{{ main_home }}/.gitconfig"
+
+# Logging and debugging
+debug_mode: false
+log_level: "info"  # Options: debug, info, warn, error
+
+# Feature flags for Jammy
+features:
+  install_development_tools: true
+  install_media_tools: true
+  install_productivity_tools: true
+  install_latex_tools: true
+  configure_bash: true
+  setup_networking: true
+  enable_backups: false
+  install_ai_cli_tools: true
+
+# Performance settings
+parallel_downloads: 5
+max_download_retries: 3
+download_timeout: 300
+
+# Jammy-specific package differences
+jammy_specific_packages:
+  # Packages that might have different names or availability in 22.04
+  python_packages:
+    - python3-dev
+    - python3-pip
+    - python3-virtualenv
+    - python-is-python3  # Available in 22.04
+
+  # Some packages might be newer/older versions
+  development_packages:
+    - build-essential
+    - git
+    - curl
+    - wget

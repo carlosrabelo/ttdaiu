@@ -1,0 +1,7 @@
+---
+- apt:
+    pkg:
+      - sdcc
+      - z80asm
+      - z80dasm
+    state: present

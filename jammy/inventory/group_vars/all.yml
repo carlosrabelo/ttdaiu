@@ -1,0 +1,16 @@
+# Common variables for all environments in Jammy
+# These apply regardless of which inventory is used
+
+common_packages:
+  - curl
+  - git
+  - wget
+  - vim
+
+# Default values (can be overridden per environment)
+backup_enabled: false
+debug_mode: false
+apt_upgrade_type: "dist"
+log_level: "info"
+ubuntu_version: "22.04"
+ubuntu_codename: "jammy"

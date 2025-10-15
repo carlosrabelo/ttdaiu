@@ -1,0 +1,91 @@
+---
+# Main playbook for Ubuntu 22.04 Jammy Jellyfish
+- name: Bootstrap Ubuntu Jammy with ttdaiu
+  hosts: all
+  become: yes
+  vars:
+    main_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+    main_home: "{{ '/home/' + (ansible_env.SUDO_USER | default(ansible_user_id)) }}"
+
+  pre_tasks:
+
+
+    - name: Verify Ubuntu version compatibility
+      ansible.builtin.assert:
+        that:
+          - ansible_distribution == "Ubuntu"
+          - ansible_distribution_version == "22.04"
+        fail_msg: "This playbook is designed for Ubuntu 22.04 (Jammy Jellyfish)"
+
+    - name: Apt | update cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+  roles:
+    - role: backup
+      tags: [backup]
+      when: features.enable_backups | default(false)
+
+    - role: packages
+      tags: [packages]
+
+    - role: bash
+      tags: [bash]
+      when: features.configure_bash | default(true)
+
+    - role: libvirt
+      tags: [libvirt]
+      when: features.install_development_tools | default(true)
+
+    - role: nginx
+      tags: [nginx]
+      when: features.install_development_tools | default(true)
+
+    - role: z80
+      tags: [z80]
+      when: features.install_development_tools | default(true)
+
+    - role: github
+      tags: [github]
+      when: features.install_development_tools | default(true)
+
+    - role: chromium
+      tags: [chromium, snap]
+      when: features.install_productivity_tools | default(true)
+
+    - role: code
+      tags: [code, snap]
+      when: features.install_development_tools | default(true)
+
+    - role: codium
+      tags: [codium, snap]
+      when: features.install_development_tools | default(true)
+
+    - role: docker
+      tags: [docker]
+      when: features.install_development_tools | default(true)
+
+    - role: golang
+      tags: [golang, snap]
+      when: features.install_development_tools | default(true)
+
+    - role: libreoffice
+      tags: [libreoffice, snap]
+      when: features.install_productivity_tools | default(true)
+
+    - role: node
+      tags: [node, iacode, snap]
+      when: features.install_development_tools | default(true)
+
+    - role: codex
+      tags: [codex, iacode, npm]
+      when: features.install_ai_cli_tools | default(true)
+
+    - role: claude
+      tags: [claude, iacode, npm]
+      when: features.install_ai_cli_tools | default(true)
+
+    - role: gemini
+      tags: [gemini, iacode, npm]
+      when: features.install_ai_cli_tools | default(true)

@@ -1,0 +1,31 @@
+# Full environment specific variables for Jammy
+
+# Enable verbose output for full environment
+ansible_verbosity: 2
+
+# Full environment package selections
+full_packages:
+  - stress
+  - htop
+  - tree
+
+# Faster cache invalidation for testing
+apt_cache_valid_time: 300
+
+# Enable all features for comprehensive testing
+features:
+  install_development_tools: true
+  install_media_tools: true
+  install_productivity_tools: true
+  install_latex_tools: true
+  configure_bash: true
+  setup_networking: true
+  enable_backups: false  # Usually disabled in testing
+  install_ai_cli_tools: true
+
+# Jammy testing specific settings
+jammy_testing:
+  # Test compatibility mode for older packages
+  compatibility_mode: true
+  # Enable experimental features for testing
+  experimental_features: true

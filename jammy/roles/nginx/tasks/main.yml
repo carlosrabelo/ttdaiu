@@ -1,0 +1,7 @@
+---
+- apt:
+    pkg:
+      - nginx
+      - php-fpm
+    state: present
+

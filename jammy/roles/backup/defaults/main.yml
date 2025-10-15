@@ -1,0 +1,23 @@
+---
+# Default variables for backup role
+
+backup_enabled: false
+backup_directory: "{{ main_home }}/.ttdaiu_backup"
+
+backup_files:
+  - "{{ main_home }}/.bashrc"
+  - "{{ main_home }}/.bash_aliases"
+  - "{{ main_home }}/.bash_profile"
+  - "{{ main_home }}/.profile"
+  - "{{ main_home }}/.gitconfig"
+  - "{{ main_home }}/.vimrc"
+  - "{{ main_home }}/.tmux.conf"
+  - "{{ main_home }}/.ssh/config"
+  - "/etc/hosts"
+
+# Optional: directories to backup (recursively)
+backup_directories: []
+
+# Retention settings
+backup_keep_days: 30
+backup_max_copies: 10
