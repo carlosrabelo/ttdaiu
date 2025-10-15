@@ -1,5 +1,7 @@
 # TTDAIU - Things to Do After Installing Ubuntu
 
+![CI](https://github.com/carlosdelfino/ttdaiu/workflows/CI/badge.svg)
+
 **TTDAIU** is an Ansible-based automation tool that configures and optimizes Ubuntu systems after installation. It installs essential applications, development tools, and system utilities automatically.
 
 ## Purpose
