@@ -147,6 +147,7 @@ UBUNTU_VERSION=jammy ENV=full TAGS=docker,golang make run
 | `claude` | Claude AI CLI | Ferramenta de linha de comando Claude da Anthropic |
 | `codex` | OpenAI Codex CLI | Assistente de codificação OpenAI |
 | `gemini` | Google Gemini CLI | Assistente IA Google |
+| `opencode` | OpenCode AI CLI | Assistente de desenvolvimento com IA |
 
 ### Tags Especializadas
 
