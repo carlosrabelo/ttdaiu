@@ -1,15 +1,6 @@
 ---
-# Optimized package management role with parallel installation
-# Performance improvements and better error handling
+# Package management tasks focused on reliable, sequential execution
 
-# Performance optimization variables
-- name: Set performance variables
-  ansible.builtin.set_fact:
-    package_batch_size: "{{ package_batch_size | default(5) }}"
-    parallel_install: "{{ parallel_install | default(true) }}"
-    use_apt_fast: "{{ use_apt_fast | default(false) }}"
-
-# Check for apt-fast (parallel apt wrapper)
 - name: Check if apt-fast is available
   ansible.builtin.command: which apt-fast
   register: apt_fast_check
@@ -17,19 +8,17 @@
   changed_when: false
   tags: [performance, optimization]
 
-# Install apt-fast if requested and available
-- name: Install apt-fast for parallel package installation
+- name: Install apt-fast when requested
   ansible.builtin.apt:
     pkg: apt-fast
     state: present
     update_cache: true
-  when: 
+  when:
     - use_apt_fast | default(false)
     - apt_fast_check.rc != 0
   tags: [performance, optimization]
 
-# Update package cache with optimization
-- name: Update package cache (optimized)
+- name: Update package cache
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: "{{ apt_cache_valid_time | default(3600) }}"
@@ -39,23 +28,19 @@
   until: apt_update_result is succeeded
   tags: [system, update]
 
-# System upgrade with performance optimization
-- name: Perform system upgrade (optimized)
+- name: Perform system upgrade
   ansible.builtin.apt:
     upgrade: "{{ apt_upgrade_type | default('dist') }}"
   register: apt_upgrade_result
   retries: 2
   delay: 30
   until: apt_upgrade_result is succeeded
-  when: 
+  when:
     - apt_upgrade_type is defined
     - not ansible_check_mode
-  async: 1800
-  poll: 30
   tags: [system, upgrade]
 
-# Install packages in parallel batches
-- name: Install development packages (parallel)
+- name: Install development packages
   ansible.builtin.apt:
     pkg: "{{ development_packages }}"
     state: present
@@ -63,29 +48,10 @@
   retries: 2
   delay: 10
   until: dev_packages_result is succeeded
-  when: 
-    - features.install_development_tools | default(true)
-    - parallel_install
-    - not ansible_check_mode
-  async: 600
-  poll: 10
-  tags: [development, packages, parallel]
-
-- name: Install development packages (sequential fallback)
-  ansible.builtin.apt:
-    pkg: "{{ development_packages }}"
-    state: present
-  register: dev_packages_result_seq
-  retries: 2
-  delay: 10
-  until: dev_packages_result_seq is succeeded
-  when: 
-    - features.install_development_tools | default(true)
-    - not parallel_install
+  when: development_packages | length > 0
   tags: [development, packages]
 
-# Install network packages in parallel
-- name: Install network packages (parallel)
+- name: Install network packages
   ansible.builtin.apt:
     pkg: "{{ network_packages }}"
     state: present
@@ -93,29 +59,10 @@
   retries: 2
   delay: 10
   until: network_packages_result is succeeded
-  when: 
-    - features.setup_networking | default(true)
-    - parallel_install
-    - not ansible_check_mode
-  async: 600
-  poll: 10
-  tags: [network, packages, parallel]
-
-- name: Install network packages (sequential fallback)
-  ansible.builtin.apt:
-    pkg: "{{ network_packages }}"
-    state: present
-  register: network_packages_result_seq
-  retries: 2
-  delay: 10
-  until: network_packages_result_seq is succeeded
-  when: 
-    - features.setup_networking | default(true)
-    - not parallel_install
+  when: network_packages | length > 0
   tags: [network, packages]
 
-# Install media packages in parallel (larger batch)
-- name: Install media packages (parallel)
+- name: Install media packages
   ansible.builtin.apt:
     pkg: "{{ media_packages }}"
     state: present
@@ -123,29 +70,10 @@
   retries: 2
   delay: 15
   until: media_packages_result is succeeded
-  when: 
-    - features.install_media_tools | default(true)
-    - parallel_install
-    - not ansible_check_mode
-  async: 1200
-  poll: 15
-  tags: [media, packages, parallel]
-
-- name: Install media packages (sequential fallback)
-  ansible.builtin.apt:
-    pkg: "{{ media_packages }}"
-    state: present
-  register: media_packages_result_seq
-  retries: 2
-  delay: 15
-  until: media_packages_result_seq is succeeded
-  when: 
-    - features.install_media_tools | default(true)
-    - not parallel_install
+  when: media_packages | length > 0
   tags: [media, packages]
 
-# Install graphics packages in parallel
-- name: Install graphics packages (parallel)
+- name: Install graphics packages
   ansible.builtin.apt:
     pkg: "{{ graphics_packages }}"
     state: present
@@ -153,29 +81,10 @@
   retries: 2
   delay: 10
   until: graphics_packages_result is succeeded
-  when: 
-    - features.install_media_tools | default(true)
-    - parallel_install
-    - not ansible_check_mode
-  async: 900
-  poll: 15
-  tags: [graphics, packages, parallel]
-
-- name: Install graphics packages (sequential fallback)
-  ansible.builtin.apt:
-    pkg: "{{ graphics_packages }}"
-    state: present
-  register: graphics_packages_result_seq
-  retries: 2
-  delay: 10
-  until: graphics_packages_result_seq is succeeded
-  when: 
-    - features.install_media_tools | default(true)
-    - not parallel_install
+  when: graphics_packages | length > 0
   tags: [graphics, packages]
 
-# Install productivity packages in parallel
-- name: Install productivity packages (parallel)
+- name: Install productivity packages
   ansible.builtin.apt:
     pkg: "{{ productivity_packages }}"
     state: present
@@ -183,29 +92,10 @@
   retries: 2
   delay: 10
   until: productivity_packages_result is succeeded
-  when: 
-    - features.install_productivity_tools | default(true)
-    - parallel_install
-    - not ansible_check_mode
-  async: 900
-  poll: 15
-  tags: [productivity, packages, parallel]
-
-- name: Install productivity packages (sequential fallback)
-  ansible.builtin.apt:
-    pkg: "{{ productivity_packages }}"
-    state: present
-  register: productivity_packages_result_seq
-  retries: 2
-  delay: 10
-  until: productivity_packages_result_seq is succeeded
-  when: 
-    - features.install_productivity_tools | default(true)
-    - not parallel_install
+  when: productivity_packages | length > 0
   tags: [productivity, packages]
 
-# Install LaTeX packages (can be large, use longer timeout)
-- name: Install LaTeX packages (parallel)
+- name: Install LaTeX packages
   ansible.builtin.apt:
     pkg: "{{ latex_packages }}"
     state: present
@@ -213,29 +103,10 @@
   retries: 2
   delay: 20
   until: latex_packages_result is succeeded
-  when: 
-    - features.install_latex_tools | default(true)
-    - parallel_install
-    - not ansible_check_mode
-  async: 1800
-  poll: 20
-  tags: [latex, packages, parallel]
-
-- name: Install LaTeX packages (sequential fallback)
-  ansible.builtin.apt:
-    pkg: "{{ latex_packages }}"
-    state: present
-  register: latex_packages_result_seq
-  retries: 2
-  delay: 20
-  until: latex_packages_result_seq is succeeded
-  when: 
-    - features.install_latex_tools | default(true)
-    - not parallel_install
+  when: latex_packages | length > 0
   tags: [latex, packages]
 
-# Install system utilities in parallel
-- name: Install system utilities (parallel)
+- name: Install system utilities
   ansible.builtin.apt:
     pkg: "{{ system_utilities }}"
     state: present
@@ -243,51 +114,14 @@
   retries: 2
   delay: 10
   until: system_utilities_result is succeeded
-  when: 
-    - parallel_install
-    - not ansible_check_mode
-  async: 600
-  poll: 10
-  tags: [utilities, packages, parallel]
-
-- name: Install system utilities (sequential fallback)
-  ansible.builtin.apt:
-    pkg: "{{ system_utilities }}"
-    state: present
-  register: system_utilities_result_seq
-  retries: 2
-  delay: 10
-  until: system_utilities_result_seq is succeeded
-  when: not parallel_install
+  when: system_utilities | length > 0
   tags: [utilities, packages]
 
-# Performance optimization: Clean package cache efficiently
-- name: Clean package cache (optimized)
+- name: Clean package cache
   ansible.builtin.apt:
     autoclean: true
     autoremove: true
-  when: 
+  when:
     - apt_clean_cache | default(true)
     - not ansible_check_mode
-  async: 300
-  poll: 10
   tags: [cleanup, optimization]
-
-# Performance summary
-- name: Display performance summary
-  ansible.builtin.debug:
-    msg: |
-      Package installation performance summary:
-      - Parallel installation: {{ 'Enabled' if parallel_install else 'Disabled' }}
-      - Package batch size: {{ package_batch_size }}
-      - apt-fast available: {{ 'Yes' if apt_fast_check.rc == 0 else 'No' }}
-      
-      Installation Results:
-      - Development packages: {{ 'OK' if (dev_packages_result is succeeded or dev_packages_result_seq is succeeded) else 'FAILED' }}
-      - Network packages: {{ 'OK' if (network_packages_result is succeeded or network_packages_result_seq is succeeded) else 'FAILED' }}
-      - Media packages: {{ 'OK' if (media_packages_result is succeeded or media_packages_result_seq is succeeded) else 'FAILED' }}
-      - Graphics packages: {{ 'OK' if (graphics_packages_result is succeeded or graphics_packages_result_seq is succeeded) else 'FAILED' }}
-      - Productivity packages: {{ 'OK' if (productivity_packages_result is succeeded or productivity_packages_result_seq is succeeded) else 'FAILED' }}
-      - LaTeX packages: {{ 'OK' if (latex_packages_result is succeeded or latex_packages_result_seq is succeeded) else 'FAILED' }}
-      - System utilities: {{ 'OK' if (system_utilities_result is succeeded or system_utilities_result_seq is succeeded) else 'FAILED' }}
-  tags: [summary, performance]

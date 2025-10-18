@@ -40,17 +40,6 @@ backup_directories:
 debug_mode: false
 log_level: "info"  # Options: debug, info, warn, error
 
-# Feature flags for Jammy
-features:
-  install_development_tools: true
-  install_media_tools: true
-  install_productivity_tools: true
-  install_latex_tools: true
-  configure_bash: true
-  setup_networking: true
-  enable_backups: false
-  install_ai_cli_tools: true
-
 # Performance settings
 parallel_downloads: 5
 max_download_retries: 3

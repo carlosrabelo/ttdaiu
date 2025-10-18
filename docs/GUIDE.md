@@ -90,7 +90,7 @@ make secure-creds
 |----------|---------|-------------|
 | `UBUNTU_VERSION` | `noble` | Ubuntu version: `noble` (24.04) or `jammy` (22.04) |
 | `ENV` | `base` | Environment: `base` (minimal) or `full` (complete) |
-| `TAGS` | `all` | Comma-separated list of tags to execute |
+| `TAGS` | *(auto)* | Comma-separated list of tags to execute; defaults to `base` (ENV=base) or `base,full` (ENV=full) |
 | `ANSIBLE_DIR` | `./noble` | Path to Ansible configuration directory |
 | `PLAYBOOK` | `site.yml` | Main playbook filename |
 | `INVENTORY` | `inventory/base.ini` | Base environment inventory file |
@@ -157,22 +157,38 @@ UBUNTU_VERSION=jammy ENV=full TAGS=docker,golang make run
 | `libvirt` | Virtualization | KVM/QEMU virtualization tools |
 | `z80` | Z80 development | Z80 assembly development tools |
 
+### Meta Tags
+
+| Tag | Description | Components |
+|-----|-------------|------------|
+| `base` | Core roles for minimal provisioning | `packages`, `bash`, `backup` |
+| `full` | Extended roles for complete workstations | All `base` roles plus development, productivity, and AI tooling |
+
 ## Configuration Options
 
-### Feature Flags
+### Role Profiles
 
-Control major feature groups via the `features` dictionary:
+Roles are grouped with meta tags so you can quickly target the right set of tasks:
 
-```yaml
-features:
-  install_development_tools: true
-  install_media_tools: true
-  install_productivity_tools: true
-  install_latex_tools: true
-  configure_bash: true
-  setup_networking: true
-  enable_backups: true
-  install_ai_cli_tools: true
+- `base`: core roles such as `packages`, `bash`, and `backup`
+- `full`: extended roles covering development, productivity, and AI tooling
+
+The `ENV` variable controls the default tag profile:
+
+- `ENV=base` → runs Ansible with `--tags base`
+- `ENV=full` → runs Ansible with `--tags base,full`
+
+Override the selection at any time with the `TAGS` variable:
+
+```bash
+# Run only the core roles
+make run TAGS=base
+
+# Combine specific roles regardless of ENV
+make run TAGS=packages,github
+
+# Execute every role
+make run TAGS=all
 ```
 
 ### Docker Configuration
@@ -184,21 +200,18 @@ docker_users: ["ubuntu"]        # Users to add to docker group
 
 ### Package Categories
 
-Configure package groups in `roles/packages/defaults/main.yml`:
+Configure package groups in `roles/packages/vars/main.yml`. Override them per environment (set to `[]` to skip) in inventory or host vars:
 
 ```yaml
-packages_system:
-  - curl
-  - wget
-  - git
-
-packages_development:
+development_packages:
   - build-essential
   - python3-dev
 
-packages_media:
+media_packages:
   - vlc
   - audacity
+
+latex_packages: []
 ```
 
 ## Advanced Usage
@@ -222,8 +235,8 @@ Override variables temporarily:
 ```bash
 cd noble
 ansible-playbook site.yml -i inventory/base.ini \
-  -e '{"features": {"install_ai_cli_tools": false}}' \
-  --tags packages
+  -e '{"golang_install_method": "apt"}' \
+  --tags golang
 ```
 
 ### Environment-Specific Configuration
@@ -272,9 +285,9 @@ Use `when` conditions in playbooks for advanced logic:
 ```yaml
 - name: Install development tools
   ansible.builtin.apt:
-    name: "{{ packages_development }}"
+    name: "{{ development_packages }}"
     state: present
-  when: features.install_development_tools | bool
+  when: development_packages | length > 0
 ```
 
 ## Troubleshooting
@@ -335,7 +348,7 @@ git checkout noble/roles/role_name/files/
 
 ## Performance Tips
 
-1. **Parallel execution**: Ansible runs tasks in parallel by default
+1. **Sequential installs**: Package roles run sequentially to avoid async issues
 2. **Local connections**: Use `connection: local` for single-machine setup
 3. **Package caching**: APT cache speeds up repeated installations
 4. **Snap preloading**: Snap packages are cached locally

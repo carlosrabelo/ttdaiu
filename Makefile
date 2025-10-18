@@ -13,7 +13,7 @@ ANSIBLE_DIR	= ./$(UBUNTU_VERSION)
 PLAYBOOK	= site.yml
 INVENTORY	= inventory/base.ini
 FULL_INVENTORY = inventory/full.ini
-TAGS		?= all
+TAGS		?=
 ENV		?= base
 
 
@@ -82,7 +82,7 @@ info:	## Show project information
 	@echo "Ansible Directory: $(ANSIBLE_DIR)"
 	@echo "Playbook: $(PLAYBOOK)"
 	@echo "Inventory: $(INVENTORY)"
-	@echo "Current Tags: $(TAGS)"
+	@echo "Current Tags: $(if $(TAGS),$(TAGS),auto (ENV=$(ENV)))"
 	@echo "Environment: $(ENV)"
 	@echo "Ansible version: $$(ansible --version | head -1 2>/dev/null || echo 'Not installed')"
 

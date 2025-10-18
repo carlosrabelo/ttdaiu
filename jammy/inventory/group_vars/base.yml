@@ -12,18 +12,16 @@ security_packages:
 # Longer cache validity for production stability
 apt_cache_valid_time: 7200
 
-# Minimal feature set for base environment
-features:
-  install_development_tools: false
-  install_media_tools: false
-  install_productivity_tools: false
-  install_latex_tools: false
-  configure_bash: true
-  setup_networking: false
-  enable_backups: true             # Always enabled in production
-  install_ai_cli_tools: false
+# Package categories disabled for the base profile
+development_packages: []
+network_packages: []
+media_packages: []
+graphics_packages: []
+productivity_packages: []
+latex_packages: []
 
 # Base backup settings
+backup_enabled: true
 backup_keep_days: 90
 backup_max_copies: 30
 

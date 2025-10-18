@@ -24,72 +24,55 @@
 
   roles:
     - role: backup
-      tags: [backup]
-      when: features.enable_backups | default(false)
+      tags: [backup, base]
 
     - role: packages
-      tags: [packages]
+      tags: [packages, base]
 
     - role: bash
-      tags: [bash]
-      when: features.configure_bash | default(true)
+      tags: [bash, base]
 
     - role: libvirt
-      tags: [libvirt]
-      when: features.install_development_tools | default(true)
+      tags: [libvirt, full]
 
     - role: nginx
-      tags: [nginx]
-      when: features.install_development_tools | default(true)
+      tags: [nginx, full]
 
     - role: z80
-      tags: [z80]
-      when: features.install_development_tools | default(true)
+      tags: [z80, full]
 
     - role: github
-      tags: [github]
-      when: features.install_development_tools | default(true)
+      tags: [github, full]
 
     - role: chromium
-      tags: [chromium, snap]
-      when: features.install_productivity_tools | default(true)
+      tags: [chromium, snap, full]
 
     - role: code
-      tags: [code, snap]
-      when: features.install_development_tools | default(true)
+      tags: [code, snap, full]
 
     - role: codium
-      tags: [codium, snap]
-      when: features.install_development_tools | default(true)
+      tags: [codium, snap, full]
 
     - role: docker
-      tags: [docker]
-      when: features.install_development_tools | default(true)
+      tags: [docker, full]
 
     - role: golang
-      tags: [golang, snap]
-      when: features.install_development_tools | default(true)
+      tags: [golang, snap, full]
 
     - role: libreoffice
-      tags: [libreoffice, snap]
-      when: features.install_productivity_tools | default(true)
+      tags: [libreoffice, snap, full]
 
     - role: node
-      tags: [node, iacode, snap]
-      when: features.install_development_tools | default(true)
+      tags: [node, iacode, snap, full]
 
     - role: codex
-      tags: [codex, iacode, npm]
-      when: features.install_ai_cli_tools | default(true)
+      tags: [codex, iacode, npm, full]
 
     - role: claude
-      tags: [claude, iacode, npm]
-      when: features.install_ai_cli_tools | default(true)
+      tags: [claude, iacode, npm, full]
 
     - role: gemini
-      tags: [gemini, iacode, npm]
-      when: features.install_ai_cli_tools | default(true)
+      tags: [gemini, iacode, npm, full]
 
     - role: opencode
-      tags: [opencode, iacode, npm]
-      when: features.install_ai_cli_tools | default(true)
+      tags: [opencode, iacode, npm, full]

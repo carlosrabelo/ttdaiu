@@ -12,13 +12,5 @@ full_packages:
 # Faster cache invalidation for testing
 apt_cache_valid_time: 300
 
-# Enable all features for comprehensive testing
-features:
-  install_development_tools: true
-  install_media_tools: true
-  install_productivity_tools: true
-  install_latex_tools: true
-  configure_bash: true
-  setup_networking: true
-  enable_backups: false  # Usually disabled in testing
-  install_ai_cli_tools: true
+# Backups are usually disabled in the full/test profile
+backup_enabled: false

@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Suppress all cryptography and paramiko warnings
-export PYTHONWARNINGS="ignore::DeprecationWarning:paramiko.*,ignore::DeprecationWarning:cryptography.*"
+# Suppress cryptography/paramiko deprecation chatter
+export PYTHONWARNINGS="ignore::DeprecationWarning:paramiko.*"
+export ANSIBLE_FORCE_COLOR=0
+export ANSIBLE_NOCOLOR=1
 
 
 
@@ -18,7 +20,7 @@ ANSIBLE_DIR=${ANSIBLE_DIR:-./${UBUNTU_VERSION}}
 PLAYBOOK=${PLAYBOOK:-site.yml}
 INVENTORY=${INVENTORY:-inventory/base.ini}
 FULL_INVENTORY=${FULL_INVENTORY:-inventory/full.ini}
-TAGS=${TAGS:-all}
+USER_TAGS=${TAGS:-}
 ENVIRONMENT=${ENV:-base}
 
 if [[ ! -d "${ANSIBLE_DIR}" ]]; then
@@ -65,10 +67,18 @@ fi
 
 pushd "${ANSIBLE_DIR}" >/dev/null
 
+if [[ -z "${USER_TAGS}" ]]; then
+  if [[ "${ENVIRONMENT}" == "full" ]]; then
+    USER_TAGS="base,full"
+  else
+    USER_TAGS="base"
+  fi
+fi
+
 args=("${PLAYBOOK}" "-i" "${inventory_path}")
 
-if [[ -n "${TAGS}" ]]; then
-  args+=(--tags "${TAGS}")
+if [[ -n "${USER_TAGS}" && "${USER_TAGS}" != "all" ]]; then
+  args+=(--tags "${USER_TAGS}")
 fi
 
 args+=(--become-method=sudo)
