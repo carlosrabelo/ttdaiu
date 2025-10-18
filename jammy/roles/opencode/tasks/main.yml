@@ -1,16 +1,9 @@
 ---
-- name: Check if opencode-ai is installed globally
+- name: Install opencode-ai (latest)
   become: true
-  ansible.builtin.command: npm list -g opencode-ai --depth=0
+  ansible.builtin.command: npm install -g opencode-ai@latest
   environment:
     PATH: "/snap/bin:{{ ansible_env.PATH }}"
-  register: opencode_npm_installed
-  failed_when: opencode_npm_installed.rc not in [0, 1]
-  changed_when: false
-
-- name: Install opencode-ai globally
-  become: true
-  ansible.builtin.command: npm install -g opencode-ai
-  environment:
-    PATH: "/snap/bin:{{ ansible_env.PATH }}"
-  when: opencode_npm_installed.rc == 1
+  register: opencode_install
+  changed_when: opencode_install.rc == 0
+  when: not ansible_check_mode

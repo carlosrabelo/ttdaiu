@@ -1,16 +1,9 @@
 ---
-- name: Check if @google/gemini-cli is installed globally
+- name: Install @google/gemini-cli (latest)
   become: true
-  ansible.builtin.command: npm list -g @google/gemini-cli --depth=0
+  ansible.builtin.command: npm install -g @google/gemini-cli@latest
   environment:
     PATH: "/snap/bin:{{ ansible_env.PATH }}"
-  register: gemini_npm_installed
-  failed_when: gemini_npm_installed.rc not in [0, 1]
-  changed_when: false
-
-- name: Install @google/gemini-cli globally
-  become: true
-  ansible.builtin.command: npm install -g @google/gemini-cli
-  environment:
-    PATH: "/snap/bin:{{ ansible_env.PATH }}"
-  when: gemini_npm_installed.rc == 1
+  register: gemini_install
+  changed_when: gemini_install.rc == 0
+  when: not ansible_check_mode
