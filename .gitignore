@@ -31,3 +31,6 @@ logs/
 *.tmp
 *.temp
 .cache/
+
+# CI/CD (not needed for personal project)
+.github/

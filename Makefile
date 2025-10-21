@@ -21,13 +21,13 @@ ENV		?= base
 # Default target - show help
 .DEFAULT_GOAL := help
 
-.PHONY: help run dry-run check syntax lint deps install-deps info clean secure-creds
+.PHONY: help run dry-run check syntax lint deps install-deps info clean
 
 help:	## Show this help
 	@echo "TTDAIU - Things to do after installing Ubuntu"
 	@echo ""
 	@echo "Main targets:"
-	@grep -h -E '^(run|dry-run|check|syntax|lint|deps|install-deps|info|clean|secure-creds):.*## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  %-13s %s\n", $$1, $$2}'
+	@grep -h -E '^(run|dry-run|check|syntax|lint|deps|install-deps|info|clean):.*## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  %-13s %s\n", $$1, $$2}'
 	@echo ""
 	@echo "Usage examples:"
 	@printf "  %-30s # Run setup (base env, Noble/24.04)\n" "make run"
@@ -85,10 +85,6 @@ info:	## Show project information
 	@echo "Current Tags: $(if $(TAGS),$(TAGS),auto (ENV=$(ENV)))"
 	@echo "Environment: $(ENV)"
 	@echo "Ansible version: $$(ansible --version | head -1 2>/dev/null || echo 'Not installed')"
-
-secure-creds:	## Setup secure credentials for production
-	@./scripts/secure-creds.sh setup
-
 
 
 clean:	## Clean temporary files
