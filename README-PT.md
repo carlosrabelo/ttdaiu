@@ -39,3 +39,7 @@ make dry-run
 ## Aviso
 
 Este projeto é destinado ao uso pessoal. Sinta-se à vontade para fazer fork e personalizá-lo para suas próprias necessidades.
+
+## Licença
+
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.

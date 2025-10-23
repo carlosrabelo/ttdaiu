@@ -39,3 +39,7 @@ make dry-run
 ## Notice
 
 This project is intended for personal use. Feel free to fork and customize it for your own needs.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
