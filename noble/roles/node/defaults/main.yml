@@ -1,0 +1,8 @@
+---
+node_version: "22.x"
+npm_prefix: "{{ main_home }}/.npm-global"
+prepare_pnpm: true
+prepare_yarn: true
+update_npm: true
+desired_npm_version: "11"
+enable_universe: true
