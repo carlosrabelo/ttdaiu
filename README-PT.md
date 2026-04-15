@@ -70,22 +70,22 @@ make run HOST=root@servidor UBUNTU_VERSION=jammy SCRIPT=z80
 ```
 ttdaiu/
 ├── ubuntu/noble/                  # Ubuntu 24.04 (Noble)
-│   ├── setup.sh            # Orquestrador
-│   ├── files/bash/         # Dotfiles (.bashrc, .bash_aliases, .bash_extras, .profile)
+│   ├── setup.sh                   # Orquestrador
+│   ├── files/bash/                # Dotfiles (.bashrc, .bash_aliases, .bash_extras, .profile)
 │   └── scripts/
-│       ├── lib.sh          # Funções comuns (log, retry, apt_install, snap_install…)
+│       ├── lib.sh                 # Funções comuns (log, retry, apt_install, snap_install…)
 │       ├── install-backup.sh
 │       ├── install-bash.sh
 │       ├── install-packages.sh
 │       ├── install-docker.sh
 │       ├── install-node.sh
-│       └── …               # Um script por componente (19 no total)
+│       └── …                      # Um script por componente (19 no total)
 ├── ubuntu/jammy/                  # Ubuntu 22.04 (Jammy) — mesma estrutura
 ├── make/
-│   ├── run-shell.sh        # Lógica de execução local e remota
-│   ├── install-deps.sh     # Instala curl e rsync
+│   ├── run-shell.sh               # Lógica de execução local e remota
+│   ├── install-deps.sh            # Instala curl e rsync
 │   └── cleanup.sh
-├── docs/                   # GUIDE.md, GUIDE-PT.md
+├── docs/                          # GUIDE.md, GUIDE-PT.md
 ├── Makefile
 └── LICENSE
 ```
