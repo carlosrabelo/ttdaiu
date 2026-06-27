@@ -23,6 +23,8 @@ main() {
     # Repository
     local codename
     codename=$(. /etc/os-release && echo "${VERSION_CODENAME}")
+    # Remove potential deb822-format duplicate to avoid APT warnings
+    run_cmd rm -f /etc/apt/sources.list.d/docker.sources
     echo "deb [arch=${arch} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu ${codename} stable" \
       | tee /etc/apt/sources.list.d/docker.list > /dev/null
   else

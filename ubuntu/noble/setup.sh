@@ -75,6 +75,7 @@ FULL_SCRIPTS=(
   sdcc
   z80
   m6502
+  godot
   github
   chromium
   code
